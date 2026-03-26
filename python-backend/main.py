@@ -1,19 +1,21 @@
 import os
 import json
-from fastapi import FastAPI, HTTPException
+import requests
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# Load API Key
+# Load API Keys
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+SARVAM_API_KEY = os.getenv("SARVAM_API_KEY")
 
 if not GEMINI_API_KEY:
     raise ValueError("Missing GEMINI_API_KEY in .env")
 
-# Initialize AI
+# Initialize Gemini
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
@@ -21,47 +23,140 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:8080"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Models for Text Mode
+class ChatMessage(BaseModel):
+    role: str
+    text: str
+
 class QueryRequest(BaseModel):
     domain_tag: str
     user_input: str
     language: str
+    chat_history: list[ChatMessage] = []  # 🧠 MEMORY ADDED HERE
 
+# ==========================================
+# 1. TEXT ENDPOINT (WITH MEMORY)
+# ==========================================
 @app.post("/api/v1/query")
 async def process_query(request: QueryRequest):
-    print(f"🚨 INCOMING INCIDENT: {request.domain_tag} | Input: {request.user_input}")
+    print(f"🚨 TEXT CHAT | Category: {request.domain_tag} | Input: {request.user_input}")
     
-    # DUAL-OUTPUT PROMPT
-    prompt = f"""
-    Aap ek Indian emergency legal AI assistant hain. 
+    # Format History for Gemini
+    contents = []
+    for msg in request.chat_history:
+        role = "user" if msg.role == "user" else "model"
+        contents.append({"role": role, "parts": [msg.text]})
+    
+    # Add Current Prompt
+    new_prompt = f"""
     Incident Category: '{request.domain_tag}'
     User Issue: "{request.user_input}"
     
-    Aapko strictly ek valid JSON return karna hai jisme do keys hon: "ui_text" aur "voice_text".
-    
-    1. "ui_text": Ye screen par dikhega. Ise proper lawyer style mein likhein. Headings, BNS Sections, aur bullet points use karein taaki padhne mein asaan ho. (Do not use Markdown stars **).
-    2. "voice_text": Ye text-to-speech engine padhega. Ise ekdum natural, human, aur conversational tone mein likhein. Isme koi brackets, section numbers ya bullet points mat daalna, bas sidha fluid explanation dena jise sun kar user shaant ho jaye. Hindi/Hinglish use karein.
+    TASK: Analyze the user issue and language (English, Hinglish, or Odia).
+    RETURN EXACTLY THIS JSON STRUCTURE:
+    {{
+        "ui_text": "[Part 1: Solution]\\n\\n⚖️ Applicable Laws / Your Rights\\n[Part 2: 1-line simple law]",
+        "voice_text": "Conversational, comforting short response in the same language without section numbers.",
+        "lang_code": "Return exactly 'hi-IN' for Hindi/Hinglish, 'en-IN' for English, or 'od-IN' for Odia."
+    }}
     """
+    contents.append({"role": "user", "parts": [new_prompt]})
 
     try:
-        # Force Gemini to return JSON
-        response = model.generate_content(
-            prompt,
-            generation_config={"response_mime_type": "application/json"}
-        )
-        
-        # Parse the JSON response
+        response = model.generate_content(contents, generation_config={"response_mime_type": "application/json"})
         ai_data = json.loads(response.text)
+        return {"status": "success", "reply": ai_data}
+    except Exception as e:
+        print(f"❌ Gemini Error: {e}")
+        raise HTTPException(status_code=500, detail="Gemini failed to respond")
+
+
+# ==========================================
+# 2. VOICE ENDPOINT (SARVAM AI + GEMINI + MEMORY)
+# ==========================================
+@app.post("/api/v1/voice-query")
+async def process_voice_query(
+    audio: UploadFile = File(...),
+    domain_tag: str = Form(...),
+    chat_history: str = Form(...) # Comes as JSON string from React
+):
+    print(f"🎙️ VOICE CALL INCOMING | Category: {domain_tag}")
+    if not SARVAM_API_KEY:
+        raise HTTPException(status_code=500, detail="SARVAM_API_KEY is missing!")
+
+    temp_audio_path = f"temp_{audio.filename}"
+    try:
+        # 1. Save Audio Temporarily
+        with open(temp_audio_path, "wb") as buffer:
+            buffer.write(await audio.read())
+
+        # 2. SARVAM STT (Listen to User)
+        stt_response = requests.post(
+            "https://api.sarvam.ai/speech-to-text",
+            headers={"api-subscription-key": SARVAM_API_KEY},
+            files={'file': open(temp_audio_path, 'rb')},
+            data={'model': 'saaras:v3', 'mode': 'transcribe'}
+        )
+        stt_data = stt_response.json()
+        user_spoken_text = stt_data.get("transcript", "")
         
+        if not user_spoken_text:
+            raise Exception("Could not hear anything in the audio.")
+            
+        print(f"🗣️ User Said: {user_spoken_text}")
+
+        # 3. GEMINI BRAIN (Think & Remember)
+        history_list = json.loads(chat_history)
+        contents = [{"role": "user" if m["role"] == "user" else "model", "parts": [m["text"]]} for m in history_list]
+        
+        new_prompt = f"""
+        Incident Category: '{domain_tag}'
+        User Audio Transcript: "{user_spoken_text}"
+        
+        RETURN EXACTLY THIS JSON STRUCTURE:
+        {{
+            "ui_text": "[Solution]\\n\\n⚖️ Applicable Laws\\n[Law]",
+            "voice_text": "Keep it under 3 sentences. Very conversational, like you are talking on a phone call.",
+            "lang_code": "hi-IN" 
+        }}
+        """
+        contents.append({"role": "user", "parts": [new_prompt]})
+        gemini_res = model.generate_content(contents, generation_config={"response_mime_type": "application/json"})
+        ai_data = json.loads(gemini_res.text)
+
+        # 4. SARVAM TTS (Speak Back)
+        print(f"🤖 AI Thinking Complete. Generating Voice in {ai_data['lang_code']}...")
+        tts_response = requests.post(
+            "https://api.sarvam.ai/text-to-speech",
+            headers={"api-subscription-key": SARVAM_API_KEY, "Content-Type": "application/json"},
+            json={
+                "text": ai_data['voice_text'],
+                "target_language_code": ai_data.get('lang_code', 'hi-IN'),
+                "speaker": "shubh",
+                "model": "bulbul:v3",
+                "output_audio_codec": "mp3"
+            }
+        )
+        tts_data = tts_response.json()
+        audio_base64 = tts_data.get("audios", [""])[0]
+
         return {
             "status": "success",
-            "reply": ai_data
+            "user_text": user_spoken_text,
+            "reply": ai_data,
+            "audio_base64": audio_base64
         }
+
     except Exception as e:
-        print(f"❌ Gemini API Error: {e}")
-        raise HTTPException(status_code=500, detail="Failed to generate dual-response")
+        print(f" Voice Pipeline Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        # Cleanup audio file
+        if os.path.exists(temp_audio_path):
+            os.remove(temp_audio_path)
