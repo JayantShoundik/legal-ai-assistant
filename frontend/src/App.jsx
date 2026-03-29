@@ -206,6 +206,15 @@ const Workspace = ({ user }) => {
 
   const handleQuickPrompt = (prompt) => setInputText(prompt);
 
+  const getAuthToken = async () => {
+    try {
+      // forceRefresh=true silently gets a fresh token if expired
+      return await auth.currentUser?.getIdToken(true);
+    } catch {
+      return null;
+    }
+  };
+
   const handleSubmit = async () => {
     if (!inputText.trim()) return;
     const currentInput = inputText;
@@ -214,9 +223,10 @@ const Workspace = ({ user }) => {
     setInputText('');
     setIsSubmitting(true);
     try {
+      const token = await getAuthToken();
       const response = await fetch('http://localhost:9000/api/v1/chat/query', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) },
         body: JSON.stringify({ domain_tag: activeDomain.id, user_input: currentInput, language: 'hi-IN', chat_history: historySnapshot })
       });
       if (!response.ok) throw new Error('API Error');
@@ -224,7 +234,7 @@ const Workspace = ({ user }) => {
       setChatHistory(prev => [...prev, { role: 'model', text: data.reply.ui_text }]);
       if (data.reply?.doc_status?.ready_to_generate) setDocReady(true);
     } catch (error) {
-      setChatHistory(prev => [...prev, { role: 'model', text: "⚠️ Server connection failed." }]);
+      setChatHistory(prev => [...prev, { role: 'model', text: "⚠️ Server connection failed. Please try again." }]);
     } finally {
       setIsSubmitting(false);
     }
@@ -246,20 +256,45 @@ const Workspace = ({ user }) => {
         formData.append('domain_tag', activeDomain.id);
         formData.append('chat_history', JSON.stringify(cleanHistory));
         try {
-          const response = await fetch('http://localhost:9000/api/v1/voice/query', { method: 'POST', body: formData });
+          const token = await getAuthToken();
+          const response = await fetch('http://localhost:9000/api/v1/voice/query', {
+            method: 'POST',
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+            body: formData
+          });
           if (!response.ok) throw new Error(`Server Error: ${response.status}`);
           const data = await response.json();
-          if (data && data.reply) {
-            setChatHistory(prev => [...prev, { role: 'user', text: `🎙️ (Voice): ${data.user_text}` }, { role: 'model', text: data.reply.ui_text }]);
+
+          // Handle unclear audio — play sorry message and loop, don't add to chat
+          if (data.status === 'unclear') {
             if (data.audio_base64) {
               setIsPlayingAudio(true);
               const audio = new Audio(`data:audio/mp3;base64,${data.audio_base64}`);
               audio.play();
               audio.onended = () => { setIsPlayingAudio(false); if (modeRef.current === 'voice') startRecording(); };
-            } else { if (modeRef.current === 'voice') startRecording(); }
+            } else {
+              if (modeRef.current === 'voice') startRecording();
+            }
+            return;
+          }
+
+          if (data && data.reply) {
+            if (data.user_text) {
+              setChatHistory(prev => [...prev, { role: 'user', text: `🎙️ (Voice): ${data.user_text}` }, { role: 'model', text: data.reply.ui_text }]);
+            }
+            if (data.audio_base64) {
+              setIsPlayingAudio(true);
+              const audio = new Audio(`data:audio/mp3;base64,${data.audio_base64}`);
+              audio.play();
+              audio.onended = () => { setIsPlayingAudio(false); if (modeRef.current === 'voice') startRecording(); };
+            } else {
+              if (modeRef.current === 'voice') startRecording();
+            }
           }
         } catch (error) {
-          setChatHistory(prev => [...prev, { role: 'model', text: "⚠️ Voice connection failed." }]);
+          console.error('Voice error:', error);
+          // Don't show error in chat — just restart loop silently
+          if (modeRef.current === 'voice') setTimeout(() => startRecording(), 1500);
         } finally { setIsProcessingVoice(false); }
       };
       recorder.start();
@@ -284,30 +319,41 @@ const Workspace = ({ user }) => {
     if (isRecording) stopRecording();
   };
 
+  // Always show doc button if there's enough chat history (3+ messages)
+  const canGenerateDoc = chatHistory.length >= 3;
+
   const handleGenerateDoc = async () => {
     setIsGeneratingDoc(true);
     try {
+      const token = await getAuthToken();
+      const cleanHistory = chatHistoryRef.current.map(m => ({
+        role: m.role === 'model' ? 'model' : 'user',
+        text: m.text.replace(/^🎙️ \(Voice\): /, '')
+      }));
       const response = await fetch('http://localhost:9000/api/v1/document/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ domain_tag: activeDomain.id, chat_history: chatHistoryRef.current })
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) },
+        body: JSON.stringify({ domain_tag: activeDomain.id, chat_history: cleanHistory })
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.detail);
+      if (!response.ok) throw new Error(data.detail || 'Generation failed');
 
-      const win = window.open('', '_blank');
-      win.document.write(`
-        <html><head><title>Legal Document - Vidhan.ai</title>
+      // Open in same tab as a blob to avoid popup blocker
+      const fullHtml = `<!DOCTYPE html><html><head><title>Legal Document - Vidhan.ai</title>
         <style>
-          body { font-family: 'Times New Roman', serif; max-width: 800px; margin: 40px auto; padding: 40px; color: #000; }
-          .legal-doc { line-height: 1.8; }
-          @media print { body { margin: 0; } }
+          body { font-family: 'Times New Roman', serif; max-width: 800px; margin: 40px auto; padding: 40px; color: #000; font-size: 14px; }
+          .legal-doc { line-height: 2; }
+          h2, h3 { text-align: center; }
+          @media print { body { margin: 20px; } }
         </style></head>
-        <body>${data.draft_html}<br/><br/>
-        <script>window.onload = () => { window.print(); }<\/script>
-        </body></html>
-      `);
-      win.document.close();
+        <body>${data.draft_html}</body></html>`;
+      const blob = new Blob([fullHtml], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.click();
+      URL.revokeObjectURL(url);
     } catch (err) {
       alert('Document generation failed: ' + err.message);
     } finally {
@@ -447,7 +493,7 @@ const Workspace = ({ user }) => {
             <div ref={chatEndRef} className="h-4" />
           </div>
           
-          {docReady && (
+          {canGenerateDoc && (
             <div className="w-full max-w-4xl mx-auto shrink-0 mb-4 animate-in fade-in slide-in-from-bottom-4">
               <button
                 onClick={handleGenerateDoc}
@@ -509,6 +555,14 @@ const Workspace = ({ user }) => {
                       <p className={`text-sm font-bold tracking-wide uppercase ${isRecording ? 'text-rose-500' : 'text-slate-400'}`}>
                         {isRecording ? "Recording... Tap to conclude" : "Tap to begin voice consultation"}
                       </p>
+                      {isRecording && (
+                        <button
+                          onClick={() => { stopRecording(); setMode('text'); }}
+                          className="mt-2 px-6 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold transition-all"
+                        >
+                          🔴 End Conversation
+                        </button>
+                      )}
                     </div>
                  )}
               </div>

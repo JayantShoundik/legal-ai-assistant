@@ -1,0 +1,304 @@
+INFO:     Will watch for changes in these directories: ['/Users/jayantshoundik/legal-ai-assistant/python-backend']
+INFO:     Uvicorn running on http://127.0.0.1:9000 (Press CTRL+C to quit)
+INFO:     Started reloader process [67176] using WatchFiles
+/Users/jayantshoundik/legal-ai-assistant/python-backend/routers/text_chat.py:6: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 9184.93it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO:     Started server process [67179]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🚀 Starting up — ingesting PDFs into vector DB...
+⏭️  Already ingested: Drafting-Pleadings-and-Conveyancing.pdf
+⏭️  Already ingested: BNS-2023.txt
+⏭️  Already ingested: Motor-Vehicle-Act-Traffic-Rules.txt
+📚 RAG ready: {'status': 'success', 'ingested': [], 'total_chunks': 815}
+INFO:     127.0.0.1:61753 - "GET / HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'routers/doc_gen.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67179]
+/Users/jayantshoundik/legal-ai-assistant/python-backend/routers/text_chat.py:6: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8291.21it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+INFO:     Started server process [67960]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'routers/text_chat.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67960]
+/Users/jayantshoundik/legal-ai-assistant/python-backend/routers/text_chat.py:6: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 16046.25it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+INFO:     Started server process [68036]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🚀 Starting up — ingesting PDFs into vector DB...
+⏭️  Already ingested: Drafting-Pleadings-and-Conveyancing.pdf
+⏭️  Already ingested: BNS-2023.txt
+⏭️  Already ingested: Motor-Vehicle-Act-Traffic-Rules.txt
+📚 RAG ready: {'status': 'success', 'ingested': [], 'total_chunks': 815}
+INFO:     127.0.0.1:62362 - "OPTIONS /api/v1/voice/query HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'routers/voice_chat.py'. Reloading...
+🎙️ VOICE CALL INCOMING | Category: workplace
+📦 Received audio bytes: 193588
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_ccd162bf-cf2e-4964-a728-e627035a0a51","transcript":"ਉਹ ਭਾਅ ਜੀ ਤੁਸੀਂ ਇੱਕ ਗੱਲ ਦੱਸੋ, ਸਾਡੇ ਨਾਲ ਇੱਕ ਕੁੜੀ ਰਹਿੰਦੀ ਹੈ, ਉਹ ਮੈਨੂੰ ਬਾਰ ਬਾਰ ਇੱਕ ਹੀ ਗੱਲ ਦੱਸ ਕੇ ਪਰੇਸ਼ਾਨ ਕਰਦੀ ਹੈ, ਸਾਡਾ ਰਾਈਟ ਕੀ ਹੈ?","language_code":"pa-IN","language_probability":0.845}
+🗣️ Transcript: 'ਉਹ ਭਾਅ ਜੀ ਤੁਸੀਂ ਇੱਕ ਗੱਲ ਦੱਸੋ, ਸਾਡੇ ਨਾਲ ਇੱਕ ਕੁੜੀ ਰਹਿੰਦੀ ਹੈ, ਉਹ ਮੈਨੂੰ ਬਾਰ ਬਾਰ ਇੱਕ ਹੀ ਗੱਲ ਦੱਸ ਕੇ ਪਰੇਸ਼ਾਨ ਕਰਦੀ ਹੈ, ਸਾਡਾ ਰਾਈਟ ਕੀ ਹੈ?' | Lang: pa-IN
+🔊 TTS | lang: hi-IN | speaker: shubh | text: नमस्ते! आपकी परेशानी समझते हैं. दिए गए कानूनी दस्तावेज़ों के
+🔊 TTS status: 200
+INFO:     127.0.0.1:62362 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [68036]
+/Users/jayantshoundik/legal-ai-assistant/python-backend/routers/text_chat.py:6: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 17749.11it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+INFO:     Started server process [68143]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🚀 Starting up — ingesting PDFs into vector DB...
+⏭️  Already ingested: Drafting-Pleadings-and-Conveyancing.pdf
+⏭️  Already ingested: BNS-2023.txt
+⏭️  Already ingested: Motor-Vehicle-Act-Traffic-Rules.txt
+📚 RAG ready: {'status': 'success', 'ingested': [], 'total_chunks': 815}
+🎙️ VOICE CALL INCOMING | Category: workplace
+📦 Received audio bytes: 109938
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_b6f7612c-2609-4cb0-8037-fb1422603247","transcript":"ਉਹ ਪੰਜਾਬੀ ਦੀ ਗੱਲ ਕਰੋ ਭਾਅ ਜੀ, ਪੰਜਾਬੀ ਦਿਲ ਪੰਜਾਬੀ ਦੀ ਮੈਨੂੰ ਹਿੰਦੀ ਨਹੀਂ ਆਉਂਦੀ।","language_code":"pa-IN","language_probability":0.986}
+🗣️ Transcript: 'ਉਹ ਪੰਜਾਬੀ ਦੀ ਗੱਲ ਕਰੋ ਭਾਅ ਜੀ, ਪੰਜਾਬੀ ਦਿਲ ਪੰਜਾਬੀ ਦੀ ਮੈਨੂੰ ਹਿੰਦੀ ਨਹੀਂ ਆਉਂਦੀ।' | Lang: pa-IN
+🔊 TTS | lang: pa-IN | speaker: shubh | text: ਮਾਫ਼ ਕਰਨਾ ਭਾਅ ਜੀ, ਇਸ ਸਮੇਂ ਮੇਰੇ ਕੋਲ ਜੋ ਕਾਨੂੰਨੀ ਹਵਾਲੇ ਹਨ, ਉਹਨਾ
+🔊 TTS status: 200
+INFO:     127.0.0.1:62497 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62582 - "OPTIONS /api/v1/document/generate HTTP/1.1" 200 OK
+📄 GENERATING DOCUMENT | Domain: workplace
+INFO:     127.0.0.1:62582 - "POST /api/v1/document/generate HTTP/1.1" 200 OK
+📄 GENERATING DOCUMENT | Domain: workplace
+INFO:     127.0.0.1:62752 - "POST /api/v1/document/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52802 - "OPTIONS /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 283990
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_20a2218a-b0b9-4ccf-bf68-7ca3e0129411","transcript":"बिरयानी कैसे बनाए? एक बार और बोल। बिरयानी कैसे बनाए? फिर से बोलो, नहीं सुना। एक कान को पास लाओ। बिरयानी कैसे बनाए?","language_code":"hi-IN","language_probability":0.988}
+🗣️ Transcript: 'बिरयानी कैसे बनाए? एक बार और बोल। बिरयानी कैसे बनाए? फिर से बोलो, नहीं सुना। एक कान को पास लाओ। बिरयानी कैसे बनाए?' | Lang: hi-IN
+🔊 TTS | lang: hi-IN | speaker: shubh | text: नमस्ते! मैं विधान.एआई से बात कर रहा हूँ। माफ कीजिएगा, मैं का
+🔊 TTS status: 200
+INFO:     127.0.0.1:52802 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 35216
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_ce2bc436-156c-4281-8888-3434133b0e68","transcript":"","language_code":"en-IN","language_probability":0.923}
+🗣️ Transcript: '' | Lang: en-IN
+INFO:     127.0.0.1:52818 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 143235
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_9768dedc-5d2e-4bd1-a309-6cf03be47cc1","transcript":"ଓଡ଼ିଆ ମେ ବୋଲୋ। ଏ ବିରିୟାନୀ ରେ କେତେ ଆଳୁ ପଡିବ।","language_code":"od-IN","language_probability":0.533}
+🗣️ Transcript: 'ଓଡ଼ିଆ ମେ ବୋଲୋ। ଏ ବିରିୟାନୀ ରେ କେତେ ଆଳୁ ପଡିବ।' | Lang: od-IN
+🔊 TTS | lang: od-IN | speaker: arjun | text: ଆପଣଙ୍କ ପ୍ରଶ୍ନ ଆଇନଗତ କିମ୍ବା ଟ୍ରାଫିକ୍ ନିୟମ ସମ୍ବନ୍ଧୀୟ ନୁହେଁ। ମୁ
+🔊 TTS status: 400
+INFO:     127.0.0.1:52826 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 136157
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_c3a799e1-3f87-414a-8746-0004adf26ee3","transcript":"ଆରେ ବୋଲ ଏ କଣ କଥା କହୁଛୁ ବିରିୟାନୀରେ କେତେ ଆଳୁ ପଡିବ।","language_code":"od-IN","language_probability":0.714}
+🗣️ Transcript: 'ଆରେ ବୋଲ ଏ କଣ କଥା କହୁଛୁ ବିରିୟାନୀରେ କେତେ ଆଳୁ ପଡିବ।' | Lang: od-IN
+🔊 TTS | lang: od-IN | speaker: arjun | text: କ୍ଷମା କରିବେ, ମୁଁ ଆପଣଙ୍କୁ ବିରିୟାନୀରେ କେତେ ଆଳୁ ପଡିବ ତାହା କହିପା
+🔊 TTS status: 400
+INFO:     127.0.0.1:52834 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 269596
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_584f6ae8-5373-4adb-8e31-275ed76234fd","transcript":"अरे वो प्रोसेसिंग कर रहा है, प्रोसेसिंग कर रहा है। ऐसा नहीं है, अभी बोल नहीं रहा है। अभी बोल। कौन बोल रहा है? ये उड़िया में कौन बोला? ये हम बोल रहे हैं। ओ पाजी, ओ ओ पाजी तुसी, ओ पाजी तुसी पंजाबी दी गल कर रहे हो?","language_code":"hi-IN","language_probability":0.794}
+🗣️ Transcript: 'अरे वो प्रोसेसिंग कर रहा है, प्रोसेसिंग कर रहा है। ऐसा नहीं है, अभी बोल नहीं रहा है। अभी बोल। कौन बोल रहा है? ये उड़िया में कौन बोला? ये हम बोल रहे हैं। ओ पाजी, ओ ओ पाजी तुसी, ओ पाजी तुसी पंजाबी दी गल कर रहे हो?' | Lang: hi-IN
+🔊 TTS | lang: hi-IN | speaker: shubh | text: नमस्ते पाजी। मैं Vidhan.ai हूँ, एक भारतीय कानूनी AI। आपका यह
+🔊 TTS status: 200
+INFO:     127.0.0.1:52843 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 331846
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_3a8e5b88-8252-4747-8369-67bee2c32d5b","transcript":"ओ मेरे नाल तो तुसी पंजाबी दे सुनो सुनो सुनो सुनो सुनो सुनो हम बोल रहे हैं तू जाने जो बिरयानी में कितने आलू पड़ी वो एक बार और फिर से बोलो रुको सुन रहा है हां रुक जा रुक जा रुक जा रुक जा","language_code":"hi-IN","language_probability":0.861}
+🗣️ Transcript: 'ओ मेरे नाल तो तुसी पंजाबी दे सुनो सुनो सुनो सुनो सुनो सुनो हम बोल रहे हैं तू जाने जो बिरयानी में कितने आलू पड़ी वो एक बार और फिर से बोलो रुको सुन रहा है हां रुक जा रुक जा रुक जा रुक जा' | Lang: hi-IN
+🔊 TTS | lang: hi-IN | speaker: shubh | text: नमस्ते! मैं Vidhan.ai हूँ और मैं भारतीय कानून, जैसे BNS 2023
+🔊 TTS status: 200
+INFO:     127.0.0.1:52856 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 254785
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_6f393430-805f-4bc7-a364-0d45dc70ec5c","transcript":"विधान एआई मुझे रुक जाओ, विधान एआई मुझे ये बताओ कि अगर मुझे कोई परेशान कर रहा है बार-बार एक ही लाइन बोल के तो क्या-क्या कानूनन सलाह तुम मुझे दोगे ताकि मैं उससे छुटकारा पा सकूँ?","language_code":"hi-IN","language_probability":0.942}
+🗣️ Transcript: 'विधान एआई मुझे रुक जाओ, विधान एआई मुझे ये बताओ कि अगर मुझे कोई परेशान कर रहा है बार-बार एक ही लाइन बोल के तो क्या-क्या कानूनन सलाह तुम मुझे दोगे ताकि मैं उससे छुटकारा पा सकूँ?' | Lang: hi-IN
+🔊 TTS | lang: hi-IN | speaker: shubh | text: नमस्ते! आपके प्रश्न के लिए, विधान एआई के पास मौजूद वर्तमान क
+🔊 TTS status: 200
+INFO:     127.0.0.1:52874 - "POST /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 51739
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_dc940d96-6271-445b-b55d-07fe9888d266","transcript":"যাই হোক যাই হোক শোনো না।","language_code":"bn-IN","language_probability":0.815}
+🗣️ Transcript: 'যাই হোক যাই হোক শোনো না।' | Lang: bn-IN
+INFO:     127.0.0.1:52892 - "POST /api/v1/voice/query HTTP/1.1" 500 Internal Server Error
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 180217
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_b93db20a-aa54-4d87-b9b5-03d082e2159b","transcript":"क्या पूछे पता नहीं? उड़िया भी पूछे, बिरयानी भी कहते हैं। अरे अब तेलुगु बोलिए कुछ इसको। तेलुगु? हां तेलुगु। नहीं पेरी आंटी। और कुछ?","language_code":"hi-IN","language_probability":0.84}
+🗣️ Transcript: 'क्या पूछे पता नहीं? उड़िया भी पूछे, बिरयानी भी कहते हैं। अरे अब तेलुगु बोलिए कुछ इसको। तेलुगु? हां तेलुगु। नहीं पेरी आंटी। और कुछ?' | Lang: hi-IN
+INFO:     127.0.0.1:52989 - "POST /api/v1/voice/query HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:52995 - "OPTIONS /api/v1/voice/query HTTP/1.1" 200 OK
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 88496
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_c755061e-502e-4876-98b4-d5690f350cd8","transcript":"అవి నీ పేరు.","language_code":"te-IN","language_probability":0.865}
+🗣️ Transcript: 'అవి నీ పేరు.' | Lang: te-IN
+INFO:     127.0.0.1:52995 - "POST /api/v1/voice/query HTTP/1.1" 500 Internal Server Error
+🎙️ VOICE CALL INCOMING | Category: traffic_police
+📦 Received audio bytes: 126525
+🔧 ffmpeg exit: 0
+🔍 Sarvam STT: 200 | {"request_id":"20260329_533925d9-054e-46e7-a947-c628a1145727","transcript":"नहीं ले रहा है। नहीं लेगा, लगता है रीस्टार्ट करना होगा इसको। चेंज किया है, कुछ तो चेंज किया है। अच्छा अभी।","language_code":"hi-IN","language_probability":0.465}
+🗣️ Transcript: 'नहीं ले रहा है। नहीं लेगा, लगता है रीस्टार्ट करना होगा इसको। चेंज किया है, कुछ तो चेंज किया है। अच्छा अभी।' | Lang: hi-IN
+INFO:     127.0.0.1:53004 - "POST /api/v1/voice/query HTTP/1.1" 500 Internal Server Error
+WARNING:  WatchFiles detected changes in 'routers/voice_chat.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [68143]
+/Users/jayantshoundik/legal-ai-assistant/python-backend/routers/text_chat.py:6: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8316.58it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO:     Started server process [94313]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'routers/voice_chat.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [94313]
+/Users/jayantshoundik/legal-ai-assistant/python-backend/routers/text_chat.py:6: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:  WatchFiles detected changes in 'routers/voice_chat.py'. Reloading...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 9696.83it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+INFO:     Started server process [94360]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [94360]
+/Users/jayantshoundik/legal-ai-assistant/python-backend/routers/text_chat.py:6: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 17133.19it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+INFO:     Started server process [94403]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [94403]
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 7 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

@@ -5,6 +5,7 @@ import requests
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from dotenv import load_dotenv
 import google.generativeai as genai
+from rag_engine import retrieve_context
 
 load_dotenv()
 
@@ -53,27 +54,87 @@ async def process_voice_query(
                 data={'model': 'saaras:v3', 'mode': 'transcribe'}
             )
         print(f"🔍 Sarvam STT: {stt_response.status_code} | {stt_response.text}")
-        user_spoken_text = stt_response.json().get("transcript", "")
-        if not user_spoken_text:
-            raise Exception(f"STT failed: {stt_response.text}")
+        stt_data = stt_response.json()
+        user_spoken_text = stt_data.get("transcript", "").strip()
+        # Use Sarvam's detected language — it's the ground truth from actual speech
+        # Normalize: Sarvam may return 'or' or 'od' for Odia, map to standard code
+        raw_lang = stt_data.get("language_code", "").strip()
+        lang_normalize = {
+            'or': 'od-IN', 'od': 'od-IN', 'od-IN': 'od-IN',
+            'hi': 'hi-IN', 'hi-IN': 'hi-IN',
+            'en': 'en-IN', 'en-IN': 'en-IN', 'en-US': 'en-IN',
+            'bn': 'bn-IN', 'ta': 'ta-IN', 'te': 'te-IN', 'mr': 'mr-IN',
+        }
+        detected_lang = lang_normalize.get(raw_lang, 'hi-IN')
+        print(f"🗣️ Transcript: '{user_spoken_text}' | Sarvam raw lang: '{raw_lang}' | Normalized: '{detected_lang}'")
 
-        # 3. Gemini Brain
+        # Empty transcript → polite "can't hear you" in detected language
+        if not user_spoken_text:
+            sorry_map = {
+                'hi-IN': ("Maafi chahta hoon, mujhe aapki awaaz clearly nahi aayi. Kya aap thoda aur paas aakar ya thoda zyada awaaz mein bol sakte hain?", "shubh"),
+                'en-IN': ("I'm sorry, I couldn't hear you clearly. Could you please speak a little louder or move closer to the microphone?", "anushka"),
+                'od-IN': ("Maafi kariben, mo aapananka swara spashta shuniba pailena. Daya kari thoda jore ba kachha re katha kahanti?", "arjun"),
+            }
+            sorry_text, sorry_speaker = sorry_map.get(detected_lang, sorry_map['hi-IN'])
+            tts_sorry = requests.post(
+                "https://api.sarvam.ai/text-to-speech",
+                headers={"api-subscription-key": SARVAM_API_KEY, "Content-Type": "application/json"},
+                json={"text": sorry_text, "target_language_code": detected_lang, "speaker": sorry_speaker, "model": "bulbul:v3", "output_audio_codec": "mp3"}
+            )
+            sorry_audio = tts_sorry.json().get("audios", [""])[0]
+            return {
+                "status": "unclear",
+                "user_text": "",
+                "reply": {"ui_text": "🔇 Awaaz clearly nahi aayi. Thoda aur paas aakar bolein.", "voice_text": sorry_text, "lang_code": detected_lang},
+                "audio_base64": sorry_audio
+            }
+
+        # 3. Gemini Brain with RAG
+        rag_context = retrieve_context(user_spoken_text)
+        context_block = f"""
+    RELEVANT LEGAL REFERENCE (from BNS/Traffic Rules documents):
+    {rag_context}
+    --- END OF REFERENCE ---
+    """ if rag_context else ""
+
         history_list = json.loads(chat_history)
-        contents = [{"role": "user" if m["role"] == "user" else "model", "parts": [m["text"]]} for m in history_list]
+        contents = []
+        for m in history_list:
+            role = "user" if m["role"] == "user" else "model"
+            if contents and contents[-1]["role"] == role:
+                contents[-1]["parts"][0] += "\n" + m["text"]
+            else:
+                contents.append({"role": role, "parts": [m["text"]]})
         
         agent_prompt = f"""
+        You are Vidhan.ai, an Indian Legal AI. Respond like a real lawyer on a phone call.
         Domain: '{domain_tag}'
         User Spoke: "{user_spoken_text}"
-        
+        DETECTED LANGUAGE: {detected_lang} — You MUST reply in this exact language. Do NOT change it.
+        {context_block}
+
+        STRICT RULES:
+        1. Reply language is FIXED as {detected_lang}. Do not detect or guess — use this.
+           - hi-IN = Hindi/Hinglish
+           - en-IN = English
+           - od-IN = Odia (use Odia script)
+        2. ALWAYS cite law like a lawyer in that language:
+           - Hindi: "BNS 2023 ki Dhara [X] ke tahat"
+           - English: "Under Section [X] of Motor Vehicles Act 1988 / BNS 2023"
+           - Odia: "BNS 2023 ra Dhara [X] anusare"
+        3. Use ONLY laws from the LEGAL REFERENCE block. Do NOT hallucinate.
+        4. ui_text: Applicable Law (exact section) + Your Rights + Recommended Action.
+        5. voice_text: max 3 sentences, mention law name, in {detected_lang} language.
+
         RETURN EXACTLY THIS JSON:
         {{
-            "ui_text": "Your helpful response.",
-            "voice_text": "Keep it under 3 sentences. Very conversational phone call style.",
-            "lang_code": "hi-IN",
+            "ui_text": "Structured response in {detected_lang}:\n\n⚖️ Applicable Law:\n[Act + Section]\n\n🛡️ Your Rights:\n[Rights]\n\n✅ Recommended Action:\n[Steps]",
+            "voice_text": "Max 3 sentences in {detected_lang}. Mention law name.",
+            "lang_code": "{detected_lang}",
             "doc_status": {{
-                "requested": true/false, 
-                "ready_to_generate": true/false, 
-                "missing_fields": [] 
+                "requested": true/false,
+                "ready_to_generate": true/false,
+                "missing_fields": []
             }}
         }}
         """
@@ -81,18 +142,33 @@ async def process_voice_query(
         gemini_res = model.generate_content(contents, generation_config={"response_mime_type": "application/json"})
         ai_data = json.loads(gemini_res.text)
 
-        # 4. Sarvam TTS (Speak)
+        # Always use Sarvam's detected language — override whatever Gemini returned
+        ai_data['lang_code'] = detected_lang
+        lang_code = detected_lang
+        # Sarvam speaker map per language
+        speaker_map = {
+            'hi-IN': 'shubh',    # Hindi male
+            'en-IN': 'anushka',  # English Indian female
+            'od-IN': 'arjun',    # Odia male
+            'bn-IN': 'arjun',
+            'ta-IN': 'arjun',
+            'te-IN': 'arjun',
+            'mr-IN': 'arjun',
+        }
+        speaker = speaker_map.get(lang_code, 'shubh')
+        print(f"🔊 TTS | lang: {lang_code} | speaker: {speaker} | text: {ai_data['voice_text'][:60]}")
         tts_response = requests.post(
             "https://api.sarvam.ai/text-to-speech",
             headers={"api-subscription-key": SARVAM_API_KEY, "Content-Type": "application/json"},
             json={
                 "text": ai_data['voice_text'],
-                "target_language_code": ai_data.get('lang_code', 'hi-IN'),
-                "speaker": "shubh",
+                "target_language_code": lang_code,
+                "speaker": speaker,
                 "model": "bulbul:v3",
                 "output_audio_codec": "mp3"
             }
         )
+        print(f"🔊 TTS status: {tts_response.status_code}")
         audio_base64 = tts_response.json().get("audios", [""])[0]
 
         return {"status": "success", "user_text": user_spoken_text, "reply": ai_data, "audio_base64": audio_base64}

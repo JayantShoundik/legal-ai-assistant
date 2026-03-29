@@ -2,14 +2,22 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 
-# Import modular routers
 from routers import text_chat, voice_chat, doc_gen
+from routers import rag
+from rag_engine import ingest_pdfs
 
-# Load Env
 load_dotenv()
 
-app = FastAPI(title="Vidhan.ai Core Engine")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("🚀 Starting up — ingesting PDFs into vector DB...")
+    result = ingest_pdfs()
+    print(f"📚 RAG ready: {result}")
+    yield
+
+app = FastAPI(title="Vidhan.ai Core Engine", lifespan=lifespan)
 
 # CORS Setup
 app.add_middleware(
@@ -24,6 +32,7 @@ app.add_middleware(
 app.include_router(text_chat.router, prefix="/api/v1/chat", tags=["Text"])
 app.include_router(voice_chat.router, prefix="/api/v1/voice", tags=["Voice"])
 app.include_router(doc_gen.router, prefix="/api/v1/document", tags=["Document"])
+app.include_router(rag.router, prefix="/api/v1/rag", tags=["RAG"])
 
 @app.get("/")
 def health_check():
