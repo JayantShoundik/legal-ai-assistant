@@ -1,9 +1,16 @@
+import os
 import json
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from dotenv import load_dotenv
 import google.generativeai as genai
 
+load_dotenv()
+
 router = APIRouter()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 class ChatMessage(BaseModel):

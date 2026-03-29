@@ -3,11 +3,17 @@ import json
 import subprocess
 import requests
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from dotenv import load_dotenv
 import google.generativeai as genai
+
+load_dotenv()
 
 router = APIRouter()
 
 SARVAM_API_KEY = os.getenv("SARVAM_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 @router.post("/query")
@@ -29,14 +35,14 @@ async def process_voice_query(
         with open(temp_input, "wb") as f:
             f.write(raw_bytes)
 
-        # 2. Convert to WAV using ffmpeg
+        # 2. Convert to 16kHz mono WAV using ffmpeg
         result = subprocess.run(
-            ["ffmpeg", "-y", "-i", temp_input, "-ar", "16000", "-ac", "1", "-f", "wav", temp_wav],
+            ["/opt/homebrew/bin/ffmpeg", "-y", "-i", temp_input, "-ar", "16000", "-ac", "1", "-f", "wav", temp_wav],
             capture_output=True, text=True
         )
-        print(f"🔧 ffmpeg stderr: {result.stderr[-300:]}")
+        print(f"🔧 ffmpeg exit: {result.returncode}")
         if result.returncode != 0:
-            raise Exception(f"ffmpeg conversion failed: {result.stderr[-200:]}")
+            raise Exception(f"ffmpeg failed: {result.stderr[-300:]}")
 
         # 3. Sarvam STT
         with open(temp_wav, 'rb') as wav_file:
