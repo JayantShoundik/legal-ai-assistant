@@ -681,8 +681,8 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
               <option value="od">ଓଡ଼ିଆ</option>
             </select>
 
-            <button onClick={() => window.location.href='/premium'} className={`hidden md:flex px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 items-center gap-2 shadow-sm border hover:-translate-y-0.5 ${ecoMode ? 'bg-[#132A20] text-emerald-400 border-emerald-500/30 hover:bg-emerald-900/50' : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'}`}>
-              ⚡ {t.w_quick}
+            <button onClick={() => window.location.href='/premium'} className={`flex px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-bold rounded-xl transition-all duration-300 items-center gap-2 shadow-sm border hover:-translate-y-0.5 ${ecoMode ? 'bg-[#132A20] text-emerald-400 border-emerald-500/30 hover:bg-emerald-900/50' : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'}`}>
+              ⚡ <span className="hidden md:inline">{t.w_quick}</span><span className="md:hidden">Pro</span>
             </button>
 
             {/* Mode Switcher */}
@@ -893,90 +893,120 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
 // ==========================================
 const PremiumPage = ({ user, ecoMode }) => {
   const templates = [
-    { icon: '📝', title: 'RTI Application', desc: 'Right to Information request to any govt department', tag: 'Most Used' },
-    { icon: '📜', title: 'Legal Notice', desc: 'Formal legal notice to individual or company', tag: 'Popular' },
-    { icon: '⚖️', title: 'Affidavit', desc: 'Sworn statement for court or govt use', tag: null },
-    { icon: '🚔', title: 'FIR Draft', desc: 'First Information Report complaint draft', tag: null },
-    { icon: '🏠', title: 'Rent Agreement', desc: 'Tenant-landlord rental agreement format', tag: null },
-    { icon: '💰', title: 'Salary Dispute Notice', desc: 'Notice to employer for unpaid dues', tag: null },
-    { icon: '📦', title: 'Consumer Complaint', desc: 'NCDRC consumer forum complaint format', tag: null },
-    { icon: '👷', title: 'Labour Complaint', desc: 'Shram Suvidha / Labour dept complaint', tag: null },
-    { icon: '📱', title: 'Cyber Crime Complaint', desc: 'Online fraud / cybercrime report format', tag: 'New' },
-    { icon: '🏫', title: 'School / College Appeal', desc: 'Appeal letter to educational institution', tag: null },
-    { icon: '📊', title: 'Property Dispute Notice', desc: 'Notice for illegal possession or encroachment', tag: null },
-    { icon: '🔒', title: 'Bail Application', desc: 'Anticipatory or regular bail application draft', tag: null },
+    { icon: '📝', title: 'RTI Application', desc: 'Right to Information to any govt dept' },
+    { icon: '📜', title: 'Legal Notice', desc: 'Formal notice to individual or company' },
+    { icon: '⚖️', title: 'Affidavit', desc: 'Sworn statement for court or govt use' },
+    { icon: '🚔', title: 'FIR Draft', desc: 'First Information Report complaint' },
+    { icon: '🏠', title: 'Rent Agreement', desc: 'Tenant-landlord rental format' },
+    { icon: '💰', title: 'Salary Dispute Notice', desc: 'Notice to employer for unpaid dues' },
+    { icon: '📦', title: 'Consumer Complaint', desc: 'NCDRC consumer forum format' },
+    { icon: '👷', title: 'Labour Complaint', desc: 'Shram Suvidha / Labour dept' },
+    { icon: '📱', title: 'Cyber Crime Complaint', desc: 'Online fraud / cybercrime report' },
+    { icon: '🏫', title: 'School / College Appeal', desc: 'Appeal to educational institution' },
+    { icon: '📊', title: 'Property Dispute Notice', desc: 'Illegal possession / encroachment' },
+    { icon: '🔒', title: 'Bail Application', desc: 'Anticipatory or regular bail draft' },
   ];
 
+  const services = [
+    { icon: '👨‍⚖️', title: 'Real Lawyer Consultation', desc: 'Connect 1-on-1 with a verified Indian advocate for your case. Get proper legal advice, not just AI guidance.', tag: 'Coming Soon' },
+    { icon: '💼', title: 'CA & Financial Advisory', desc: 'Certified Chartered Accountants for tax disputes, GST issues, income tax notices & financial legal matters.', tag: 'Coming Soon' },
+    { icon: '🏛️', title: 'Court Case Tracking', desc: 'Track your case status across all Indian courts — High Court, District Court, Supreme Court.', tag: 'Coming Soon' },
+    { icon: '📋', title: 'Legal Document Review', desc: 'Get your contracts, agreements & notices reviewed by a real lawyer before signing.', tag: 'Coming Soon' },
+    { icon: '🔔', title: 'Deadline & Hearing Alerts', desc: 'Never miss a court date. Get SMS & WhatsApp reminders for hearings, deadlines & filings.', tag: 'Coming Soon' },
+    { icon: '🌐', title: 'Multilingual Legal Support', desc: 'Full legal assistance in Hindi, Telugu, Odia, Bengali, Tamil & more regional languages.', tag: 'Coming Soon' },
+  ];
+
+  const bg = ecoMode ? 'bg-[#081510] text-[#E8F5EE]' : 'bg-[#0B132B] text-white';
+  const cardBg = ecoMode ? 'bg-[#0A1A14]/80 border-emerald-500/20' : 'bg-white/5 border-white/10';
+  const accent = ecoMode ? 'text-emerald-400' : 'text-indigo-400';
+  const blob1 = ecoMode ? 'bg-emerald-600/15' : 'bg-indigo-600/20';
+  const blob2 = ecoMode ? 'bg-teal-600/15' : 'bg-purple-600/20';
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B0F1A] via-[#0D1B2A] to-[#0B132B] text-white relative overflow-hidden">
-      {/* Background blur blobs */}
-      <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
+    <div className={`min-h-screen ${bg} relative overflow-hidden font-sans`}>
+      {/* Background blobs */}
+      <div className={`absolute top-[-100px] left-[-100px] w-[500px] h-[500px] ${blob1} rounded-full blur-[130px] pointer-events-none`} />
+      <div className={`absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] ${blob2} rounded-full blur-[130px] pointer-events-none`} />
 
       {/* Header */}
-      <div className="relative z-10 flex items-center justify-between px-6 md:px-12 py-6 border-b border-white/10 backdrop-blur-xl">
-        <button onClick={() => window.history.back()} className="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-bold transition-all">
+      <div className={`relative z-10 flex items-center justify-between px-5 md:px-12 py-4 border-b backdrop-blur-xl ${ecoMode ? 'border-emerald-500/20 bg-[#081510]/80' : 'border-white/10 bg-[#0B132B]/80'}`}>
+        <button onClick={() => window.history.back()} className={`flex items-center gap-2 text-sm font-bold transition-all ${ecoMode ? 'text-emerald-400/70 hover:text-emerald-300' : 'text-slate-400 hover:text-white'}`}>
           ← Back
         </button>
         <div className="flex items-center gap-2">
-          <span className="text-lg font-extrabold tracking-tight">Vidhan.ai</span>
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white">PRO</span>
+          <MotherJusticeLogo className="w-7 h-7" isDark={true} />
+          <span className="text-base font-extrabold tracking-tight">Vidhan.ai</span>
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${ecoMode ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'}`}>PRO</span>
         </div>
-        {user && <span className="text-xs text-slate-400 truncate max-w-[120px]">{user.email}</span>}
+        {user && <span className="text-xs text-slate-500 truncate max-w-[100px]">{user.email}</span>}
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 py-12">
+      <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-12 py-10">
+
         {/* Hero */}
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 block">🔒 Premium Feature</span>
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent">
-            Legal Document Studio
+        <div className="text-center mb-14">
+          <span className={`text-[11px] font-bold uppercase tracking-widest mb-3 block ${accent}`}>✨ Coming Soon</span>
+          <h1 className={`text-3xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r bg-clip-text text-transparent ${ecoMode ? 'from-emerald-200 via-teal-200 to-white' : 'from-white via-indigo-200 to-purple-300'}`}>
+            Vidhan.ai Premium
           </h1>
-          <p className="text-slate-400 text-base md:text-lg max-w-xl mx-auto">
-            Generate court-ready RTI applications, affidavits, legal notices & more — in seconds, in your language.
+          <p className="text-slate-400 text-sm md:text-base max-w-lg mx-auto">
+            Everything you need for complete legal protection — AI documents, real lawyers, CA advisory & more.
           </p>
         </div>
 
-        {/* Pricing Card */}
-        <div className="relative mx-auto max-w-sm mb-14">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl blur-xl opacity-30" />
-          <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">Early Access Plan</p>
-            <div className="flex items-end justify-center gap-1 mb-1">
-              <span className="text-5xl font-extrabold">₹99</span>
-              <span className="text-slate-400 mb-2">/month</span>
+        {/* Document Templates — blurred */}
+        <div className="mb-14">
+          <h2 className={`text-base font-extrabold mb-2 ${accent}`}>📄 Legal Document Studio</h2>
+          <p className="text-slate-500 text-xs mb-5">Generate court-ready documents in your language — RTI, Affidavit, FIR, Legal Notice & more.</p>
+          <div className="relative">
+            {/* Blur overlay */}
+            <div className="absolute inset-0 z-10 backdrop-blur-sm bg-black/30 rounded-2xl flex flex-col items-center justify-center gap-3">
+              <span className="text-3xl">🔒</span>
+              <p className={`font-extrabold text-sm ${ecoMode ? 'text-emerald-300' : 'text-indigo-300'}`}>Unlocks with Premium</p>
+              <p className="text-slate-400 text-xs">12+ templates · Hindi, Telugu, Odia & more</p>
             </div>
-            <p className="text-slate-500 text-xs mb-6">Billed monthly · Cancel anytime</p>
-            <ul className="text-sm text-slate-300 flex flex-col gap-2 mb-8 text-left">
-              {['Unlimited document generation', 'All 12+ legal templates', 'Hindi, English & Odia support', 'Download as PDF', 'Priority AI responses'].map(f => (
-                <li key={f} className="flex items-center gap-2">✅ {f}</li>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pointer-events-none select-none">
+              {templates.map((t) => (
+                <div key={t.title} className={`backdrop-blur-md border rounded-2xl p-4 ${cardBg}`}>
+                  <div className="text-2xl mb-2">{t.icon}</div>
+                  <p className="font-bold text-xs mb-1">{t.title}</p>
+                  <p className="text-[10px] text-slate-500">{t.desc}</p>
+                </div>
               ))}
-            </ul>
-            <button className="w-full py-4 rounded-2xl font-extrabold text-sm bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/30">
-              🚀 Coming Soon — Notify Me
+            </div>
+          </div>
+        </div>
+
+        {/* Premium Services */}
+        <div className="mb-14">
+          <h2 className={`text-base font-extrabold mb-2 ${accent}`}>🌟 Premium Services</h2>
+          <p className="text-slate-500 text-xs mb-5">Real human experts + AI — complete legal & financial protection.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {services.map((s) => (
+              <div key={s.title} className={`relative backdrop-blur-md border rounded-2xl p-5 transition-all hover:scale-[1.02] ${cardBg} ${ecoMode ? 'hover:border-emerald-500/40' : 'hover:border-indigo-500/40'}`}>
+                <span className={`absolute top-3 right-3 text-[9px] font-bold px-2 py-0.5 rounded-full ${ecoMode ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'}`}>{s.tag}</span>
+                <div className="text-3xl mb-3">{s.icon}</div>
+                <p className="font-bold text-sm mb-2">{s.title}</p>
+                <p className="text-xs text-slate-500 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Notify CTA */}
+        <div className="relative mx-auto max-w-md mb-10">
+          <div className={`absolute inset-0 rounded-3xl blur-xl opacity-30 ${ecoMode ? 'bg-emerald-500' : 'bg-indigo-500'}`} />
+          <div className={`relative backdrop-blur-xl border rounded-3xl p-8 text-center ${cardBg}`}>
+            <p className={`text-xs font-bold uppercase tracking-widest mb-3 ${accent}`}>Be the First to Know</p>
+            <h3 className="text-xl font-extrabold mb-2">Premium Launch Ho Raha Hai</h3>
+            <p className="text-slate-400 text-xs mb-6">Notify me when Vidhan.ai Premium launches — early users get special access.</p>
+            <button className={`w-full py-4 rounded-2xl font-extrabold text-sm transition-all shadow-lg ${ecoMode ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-500/20' : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 shadow-indigo-500/30'}`}>
+              🔔 Notify Me at Launch
             </button>
           </div>
         </div>
 
-        {/* Templates Grid */}
-        <h2 className="text-lg font-extrabold mb-6 text-center text-slate-300">What's Inside 👇</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {templates.map((t) => (
-            <div key={t.title} className="relative group bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:border-indigo-500/40 hover:bg-white/10 transition-all cursor-not-allowed">
-              {t.tag && (
-                <span className="absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">{t.tag}</span>
-              )}
-              <div className="text-3xl mb-3">{t.icon}</div>
-              <p className="font-bold text-sm mb-1">{t.title}</p>
-              <p className="text-xs text-slate-500">{t.desc}</p>
-              <div className="mt-3 flex items-center gap-1 text-[11px] text-slate-600 font-bold">
-                🔒 Locked · Premium Only
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p className="text-center text-slate-600 text-xs mt-12">© 2025 Vidhan.ai · Legal AI for Every Indian</p>
+        <p className="text-center text-slate-600 text-xs mt-8">© 2025 Vidhan.ai · Legal AI for Every Indian</p>
       </div>
     </div>
   );
