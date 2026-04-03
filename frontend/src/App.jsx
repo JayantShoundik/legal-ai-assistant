@@ -483,6 +483,26 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
 
   const canGenerateDoc = chatHistory.length >= 3;
 
+  const getDynamicPrompts = () => {
+    if (activeDomain.id === 'traffic_police') return [
+      { title: "🚨 Dispute Fake Challan", desc: "I got a false e-challan (wrong photo/number plate). How do I cancel it online?", color: "rose" },
+      { title: "📑 Vehicle Impounded", desc: "The traffic police towed my vehicle. What is the legal process to get it back?", color: "indigo" }
+    ];
+    if (activeDomain.id === 'workplace') return [
+      { title: "💰 Unpaid Salary", desc: "My employer is refusing to pay my final full and final settlement. What are my rights?", color: "emerald" },
+      { title: "⚠️ Unfair Termination", desc: "I was fired without notice or valid reason. Can I send a legal notice?", color: "rose" }
+    ];
+    if (activeDomain.id === 'consumer_fraud') return [
+      { title: "📦 Fake Product", desc: "An e-commerce site sent a fake product and is refusing a refund. How do I file a consumer case?", color: "blue" },
+      { title: "💳 Online Scam", desc: "I was scammed out of money online. What is the immediate cyber crime procedure?", color: "rose" }
+    ];
+    return [
+      { title: t.w_prompt1_title, desc: t.w_prompt1_desc, color: "indigo" },
+      { title: t.w_prompt2_title, desc: t.w_prompt2_desc, color: "blue" }
+    ];
+  };
+  const dynamicPrompts = getDynamicPrompts();
+
   const handleAnalyzeNotice = async () => {
     if (!noticeFile) return;
     if (noticeFile.size > 5 * 1024 * 1024) { alert('File too large! Max 5MB allowed.'); return; }
@@ -672,14 +692,12 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
                  
                  {mode === 'text' && (
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                     <button onClick={() => handleQuickPrompt(t.w_prompt1_desc)} className={`text-left p-5 border rounded-2xl shadow-sm hover:-translate-y-1 transition-all text-sm font-semibold group ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E] hover:border-emerald-500/50' : 'bg-white border-slate-200 hover:border-indigo-300'}`}>
-                       <span className={`block mb-2 ${ecoMode ? 'text-emerald-400' : 'text-indigo-500'}`}>{t.w_prompt1_title}</span>
-                       {t.w_prompt1_desc}
-                     </button>
-                     <button onClick={() => handleQuickPrompt(t.w_prompt2_desc)} className={`text-left p-5 border rounded-2xl shadow-sm hover:-translate-y-1 transition-all text-sm font-semibold group ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E] hover:border-blue-500/50' : 'bg-white border-slate-200 hover:border-blue-300'}`}>
-                       <span className={`block mb-2 ${ecoMode ? 'text-blue-400' : 'text-blue-500'}`}>{t.w_prompt2_title}</span>
-                       {t.w_prompt2_desc}
-                     </button>
+                     {dynamicPrompts.map((prompt, index) => (
+                       <button key={index} onClick={() => handleQuickPrompt(prompt.desc)} className={`text-left p-5 border rounded-2xl shadow-sm hover:-translate-y-1 transition-all text-sm font-semibold group ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E]' : 'bg-white border-slate-200'}`}>
+                         <span className={`block mb-2 ${ecoMode ? `text-${prompt.color}-400` : `text-${prompt.color}-500`}`}>{prompt.title}</span>
+                         {prompt.desc}
+                       </button>
+                     ))}
                    </div>
                  )}
                </div>
