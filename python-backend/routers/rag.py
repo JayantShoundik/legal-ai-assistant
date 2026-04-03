@@ -1,15 +1,13 @@
 from fastapi import APIRouter
-from rag_engine import ingest_pdfs, collection
+from rag_engine import ingest_pdfs
 
 router = APIRouter()
 
 @router.post("/ingest")
 def ingest():
-    """Trigger PDF ingestion into vector DB."""
-    result = ingest_pdfs()
-    return result
+    return ingest_pdfs()
 
 @router.get("/status")
 def status():
-    """Check how many chunks are in the vector DB."""
-    return {"total_chunks": collection.count()}
+    from rag_engine import _chunks
+    return {"total_chunks": len(_chunks)}
