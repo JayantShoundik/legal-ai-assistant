@@ -17,7 +17,7 @@ chroma_client = chromadb.Client()
 class GeminiEmbeddingFunction(chromadb.EmbeddingFunction):
     def __call__(self, input):
         result = genai.embed_content(
-            model="models/text-embedding-004",
+            model="models/embedding-001",
             content=input,
             task_type="retrieval_document"
         )
@@ -84,7 +84,7 @@ def retrieve_context(query: str, n_results: int = 4) -> str:
         return ""
     try:
         embedding = genai.embed_content(
-            model="models/text-embedding-004",
+            model="models/embedding-001",
             content=query,
             task_type="retrieval_query"
         )

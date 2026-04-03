@@ -58,7 +58,10 @@ async def process_voice_query(
             'or': 'od-IN', 'od': 'od-IN', 'od-IN': 'od-IN',
             'hi': 'hi-IN', 'hi-IN': 'hi-IN',
             'en': 'en-IN', 'en-IN': 'en-IN', 'en-US': 'en-IN',
-            'bn': 'bn-IN', 'ta': 'ta-IN', 'te': 'te-IN', 'mr': 'mr-IN',
+            'bn': 'bn-IN', 'bn-IN': 'bn-IN',
+            'ta': 'ta-IN', 'ta-IN': 'ta-IN',
+            'te': 'te-IN', 'te-IN': 'te-IN',
+            'mr': 'mr-IN', 'mr-IN': 'mr-IN',
         }
         detected_lang = lang_normalize.get(raw_lang, 'hi-IN')
         print(f"🗣️ Transcript: '{user_spoken_text}' | Sarvam raw lang: '{raw_lang}' | Normalized: '{detected_lang}'")
