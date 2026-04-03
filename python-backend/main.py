@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 
 from routers import text_chat, voice_chat, doc_gen
 from routers import rag
+from routers import notice_analyzer
 from rag_engine import ingest_pdfs
 
 load_dotenv()
@@ -33,6 +34,7 @@ app.include_router(text_chat.router, prefix="/api/v1/chat", tags=["Text"])
 app.include_router(voice_chat.router, prefix="/api/v1/voice", tags=["Voice"])
 app.include_router(doc_gen.router, prefix="/api/v1/document", tags=["Document"])
 app.include_router(rag.router, prefix="/api/v1/rag", tags=["RAG"])
+app.include_router(notice_analyzer.router, prefix="/api/v1", tags=["Notice Analyzer"])
 
 @app.get("/")
 def health_check():

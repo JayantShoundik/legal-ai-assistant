@@ -3,16 +3,11 @@ import json
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import google.generativeai as genai
+from gemini_client import generate_with_fallback
 from rag_engine import retrieve_context
 
 load_dotenv()
-
 router = APIRouter()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash')
 
 class ChatMessage(BaseModel):
     role: str
@@ -68,20 +63,14 @@ async def generate_legal_document(request: DocRequest):
     """
 
     try:
-        response = model.generate_content(prompt)
+        response = generate_with_fallback("gemini-2.5-flash", prompt)
         html_draft = response.text.strip()
-
-        # Strip any accidental markdown wrappers
-        if html_draft.startswith("```html"):
-            html_draft = html_draft[7:]
-        if html_draft.startswith("```"):
-            html_draft = html_draft[3:]
-        if html_draft.endswith("```"):
-            html_draft = html_draft[:-3]
-        html_draft = html_draft.strip()
-
-        return {"status": "success", "draft_html": html_draft}
-
+        if html_draft.startswith("```html"): html_draft = html_draft[7:]
+        if html_draft.startswith("```"): html_draft = html_draft[3:]
+        if html_draft.endswith("```"): html_draft = html_draft[:-3]
+        return {"status": "success", "draft_html": html_draft.strip()}
     except Exception as e:
-        print(f"❌ Document Generation Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        err = str(e)
+        print(f"❌ Document Generation Error: {err}")
+        msg = "🙏 Document generate karne mein thodi problem aayi. Ek minute baad dobara try karein." if "429" in err or "quota" in err.lower() else "⚠️ Document nahi ban paya. Please thodi der baad try karein."
+        raise HTTPException(status_code=500, detail=msg)

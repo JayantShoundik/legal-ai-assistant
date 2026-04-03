@@ -1,4 +1,26 @@
 node_modules/
 target/
+
+# Secrets
 .env
+python-backend/.env
+
+# Keep production env for Cloudflare
+!frontend/.env.production
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# ChromaDB (rebuilt on deploy)
+python-backend/chroma_db/
+
+# Logs
+*.log
+backend.log
+frontend.log
+python-backend/server.log
+
+# PDF data files (too large)
 *.pdf

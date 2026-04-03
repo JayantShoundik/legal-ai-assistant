@@ -3,17 +3,16 @@ import json
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import google.generativeai as genai
+from gemini_client import generate_with_fallback
 from rag_engine import retrieve_context
 
 load_dotenv()
-
 router = APIRouter()
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash')
+FRIENDLY_ERRORS = {
+    "quota": "🙏 Hamara AI thoda busy hai abhi. Ek minute mein dobara try karein.",
+    "default": "⚠️ Kuch technical issue aa gaya. Please thodi der baad try karein."
+}
 
 class ChatMessage(BaseModel):
     role: str
@@ -76,9 +75,19 @@ async def process_text_query(request: QueryRequest):
     contents.append({"role": "user", "parts": [agent_prompt]})
 
     try:
-        response = model.generate_content(contents, generation_config={"response_mime_type": "application/json"})
+        response = generate_with_fallback("gemini-2.5-flash", contents, generation_config={"response_mime_type": "application/json"})
         ai_data = json.loads(response.text)
         return {"status": "success", "reply": ai_data}
     except Exception as e:
-        print(f"❌ Gemini Error: {e}")
-        raise HTTPException(status_code=500, detail="Gemini Engine Failed")
+        err = str(e)
+        print(f"❌ Gemini Error: {err}")
+        msg = FRIENDLY_ERRORS["quota"] if "429" in err or "quota" in err.lower() else FRIENDLY_ERRORS["default"]
+        return {
+            "status": "error",
+            "reply": {
+                "ui_text": msg,
+                "voice_text": msg,
+                "lang_code": "hi-IN",
+                "doc_status": {"requested": False, "ready_to_generate": False, "missing_fields": []}
+            }
+        }

@@ -4,18 +4,12 @@ import subprocess
 import requests
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from dotenv import load_dotenv
-import google.generativeai as genai
+from gemini_client import generate_with_fallback
 from rag_engine import retrieve_context
 
 load_dotenv()
-
 router = APIRouter()
-
 SARVAM_API_KEY = os.getenv("SARVAM_API_KEY")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash')
 
 @router.post("/query")
 async def process_voice_query(
@@ -72,8 +66,9 @@ async def process_voice_query(
         if not user_spoken_text:
             sorry_map = {
                 'hi-IN': ("Maafi chahta hoon, mujhe aapki awaaz clearly nahi aayi. Kya aap thoda aur paas aakar ya thoda zyada awaaz mein bol sakte hain?", "shubh"),
-                'en-IN': ("I'm sorry, I couldn't hear you clearly. Could you please speak a little louder or move closer to the microphone?", "anushka"),
-                'od-IN': ("Maafi kariben, mo aapananka swara spashta shuniba pailena. Daya kari thoda jore ba kachha re katha kahanti?", "arjun"),
+                'en-IN': ("I'm sorry, I couldn't hear you clearly. Could you please speak a little louder or move closer to the microphone?", "amelia"),
+                'od-IN': ("Maafi kariben, mo aapananka swara spashta shuniba pailena. Daya kari thoda jore ba kachha re katha kahanti?", "anand"),
+                'te-IN': ("Maafi cheyandi, meeru cheppindi naaku spashtanga vinipinchaledhu. Dayachesi kodhigaa dooramga vachi matladagalara?", "tanya"),
             }
             sorry_text, sorry_speaker = sorry_map.get(detected_lang, sorry_map['hi-IN'])
             tts_sorry = requests.post(
@@ -118,13 +113,12 @@ async def process_voice_query(
            - hi-IN = Hindi/Hinglish
            - en-IN = English
            - od-IN = Odia (use Odia script)
-        2. ALWAYS cite law like a lawyer in that language:
-           - Hindi: "BNS 2023 ki Dhara [X] ke tahat"
-           - English: "Under Section [X] of Motor Vehicles Act 1988 / BNS 2023"
-           - Odia: "BNS 2023 ra Dhara [X] anusare"
+           - te-IN = Telugu (use Telugu script, e.g., "BNS 2023 యొక్క సెక్షన్ [X] ప్రకారం")
+        2. ALWAYS cite law like a lawyer in that language.
         3. Use ONLY laws from the LEGAL REFERENCE block. Do NOT hallucinate.
         4. ui_text: Applicable Law (exact section) + Your Rights + Recommended Action.
         5. voice_text: max 3 sentences, mention law name, in {detected_lang} language.
+        ...
 
         RETURN EXACTLY THIS JSON:
         {{
@@ -139,7 +133,7 @@ async def process_voice_query(
         }}
         """
         contents.append({"role": "user", "parts": [agent_prompt]})
-        gemini_res = model.generate_content(contents, generation_config={"response_mime_type": "application/json"})
+        gemini_res = generate_with_fallback("gemini-2.5-flash", contents, generation_config={"response_mime_type": "application/json"})
         ai_data = json.loads(gemini_res.text)
 
         # Always use Sarvam's detected language — override whatever Gemini returned
@@ -147,13 +141,13 @@ async def process_voice_query(
         lang_code = detected_lang
         # Sarvam speaker map per language
         speaker_map = {
-            'hi-IN': 'shubh',    # Hindi male
-            'en-IN': 'anushka',  # English Indian female
-            'od-IN': 'arjun',    # Odia male
-            'bn-IN': 'arjun',
-            'ta-IN': 'arjun',
-            'te-IN': 'arjun',
-            'mr-IN': 'arjun',
+            'hi-IN': 'shubh',
+            'en-IN': 'amelia',
+            'od-IN': 'anand',
+            'te-IN': 'tanya',
+            'bn-IN': 'shubh',
+            'ta-IN': 'shubh',
+            'mr-IN': 'shubh',
         }
         speaker = speaker_map.get(lang_code, 'shubh')
         print(f"🔊 TTS | lang: {lang_code} | speaker: {speaker} | text: {ai_data['voice_text'][:60]}")
