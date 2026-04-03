@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase'; 
 
@@ -681,7 +681,7 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
               <option value="od">ଓଡ଼ିଆ</option>
             </select>
 
-            <button onClick={() => setShowDocModal(true)} className={`hidden md:flex px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 items-center gap-2 shadow-sm border hover:-translate-y-0.5 ${ecoMode ? 'bg-[#132A20] text-emerald-400 border-emerald-500/30 hover:bg-emerald-900/50' : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'}`}>
+            <button onClick={() => window.location.href='/premium'} className={`hidden md:flex px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 items-center gap-2 shadow-sm border hover:-translate-y-0.5 ${ecoMode ? 'bg-[#132A20] text-emerald-400 border-emerald-500/30 hover:bg-emerald-900/50' : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'}`}>
               ⚡ {t.w_quick}
             </button>
 
@@ -889,7 +889,101 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
 };
 
 // ==========================================
-// 5. MAIN APP COMPONENT (Global State)
+// 5. PREMIUM PAGE
+// ==========================================
+const PremiumPage = ({ user, ecoMode }) => {
+  const templates = [
+    { icon: '📝', title: 'RTI Application', desc: 'Right to Information request to any govt department', tag: 'Most Used' },
+    { icon: '📜', title: 'Legal Notice', desc: 'Formal legal notice to individual or company', tag: 'Popular' },
+    { icon: '⚖️', title: 'Affidavit', desc: 'Sworn statement for court or govt use', tag: null },
+    { icon: '🚔', title: 'FIR Draft', desc: 'First Information Report complaint draft', tag: null },
+    { icon: '🏠', title: 'Rent Agreement', desc: 'Tenant-landlord rental agreement format', tag: null },
+    { icon: '💰', title: 'Salary Dispute Notice', desc: 'Notice to employer for unpaid dues', tag: null },
+    { icon: '📦', title: 'Consumer Complaint', desc: 'NCDRC consumer forum complaint format', tag: null },
+    { icon: '👷', title: 'Labour Complaint', desc: 'Shram Suvidha / Labour dept complaint', tag: null },
+    { icon: '📱', title: 'Cyber Crime Complaint', desc: 'Online fraud / cybercrime report format', tag: 'New' },
+    { icon: '🏫', title: 'School / College Appeal', desc: 'Appeal letter to educational institution', tag: null },
+    { icon: '📊', title: 'Property Dispute Notice', desc: 'Notice for illegal possession or encroachment', tag: null },
+    { icon: '🔒', title: 'Bail Application', desc: 'Anticipatory or regular bail application draft', tag: null },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#0B0F1A] via-[#0D1B2A] to-[#0B132B] text-white relative overflow-hidden">
+      {/* Background blur blobs */}
+      <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Header */}
+      <div className="relative z-10 flex items-center justify-between px-6 md:px-12 py-6 border-b border-white/10 backdrop-blur-xl">
+        <button onClick={() => window.history.back()} className="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-bold transition-all">
+          ← Back
+        </button>
+        <div className="flex items-center gap-2">
+          <span className="text-lg font-extrabold tracking-tight">Vidhan.ai</span>
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white">PRO</span>
+        </div>
+        {user && <span className="text-xs text-slate-400 truncate max-w-[120px]">{user.email}</span>}
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 py-12">
+        {/* Hero */}
+        <div className="text-center mb-12">
+          <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3 block">🔒 Premium Feature</span>
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent">
+            Legal Document Studio
+          </h1>
+          <p className="text-slate-400 text-base md:text-lg max-w-xl mx-auto">
+            Generate court-ready RTI applications, affidavits, legal notices & more — in seconds, in your language.
+          </p>
+        </div>
+
+        {/* Pricing Card */}
+        <div className="relative mx-auto max-w-sm mb-14">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl blur-xl opacity-30" />
+          <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 text-center">
+            <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">Early Access Plan</p>
+            <div className="flex items-end justify-center gap-1 mb-1">
+              <span className="text-5xl font-extrabold">₹99</span>
+              <span className="text-slate-400 mb-2">/month</span>
+            </div>
+            <p className="text-slate-500 text-xs mb-6">Billed monthly · Cancel anytime</p>
+            <ul className="text-sm text-slate-300 flex flex-col gap-2 mb-8 text-left">
+              {['Unlimited document generation', 'All 12+ legal templates', 'Hindi, English & Odia support', 'Download as PDF', 'Priority AI responses'].map(f => (
+                <li key={f} className="flex items-center gap-2">✅ {f}</li>
+              ))}
+            </ul>
+            <button className="w-full py-4 rounded-2xl font-extrabold text-sm bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 transition-all shadow-lg shadow-indigo-500/30">
+              🚀 Coming Soon — Notify Me
+            </button>
+          </div>
+        </div>
+
+        {/* Templates Grid */}
+        <h2 className="text-lg font-extrabold mb-6 text-center text-slate-300">What's Inside 👇</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {templates.map((t) => (
+            <div key={t.title} className="relative group bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:border-indigo-500/40 hover:bg-white/10 transition-all cursor-not-allowed">
+              {t.tag && (
+                <span className="absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">{t.tag}</span>
+              )}
+              <div className="text-3xl mb-3">{t.icon}</div>
+              <p className="font-bold text-sm mb-1">{t.title}</p>
+              <p className="text-xs text-slate-500">{t.desc}</p>
+              <div className="mt-3 flex items-center gap-1 text-[11px] text-slate-600 font-bold">
+                🔒 Locked · Premium Only
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="text-center text-slate-600 text-xs mt-12">© 2025 Vidhan.ai · Legal AI for Every Indian</p>
+      </div>
+    </div>
+  );
+};
+
+// ==========================================
+// 6. MAIN APP COMPONENT (Global State)
 // ==========================================
 function App() {
   const [user, setUser] = useState(null);
@@ -921,6 +1015,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage user={user} lang={lang} setLang={setLang} ecoMode={ecoMode} setEcoMode={setEcoMode} />} />
         <Route path="/workspace" element={<Workspace user={user} lang={lang} setLang={setLang} ecoMode={ecoMode} setEcoMode={setEcoMode} />} />
+        <Route path="/premium" element={<PremiumPage user={user} ecoMode={ecoMode} />} />
       </Routes>
     </Router>
   );
