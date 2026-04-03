@@ -588,7 +588,7 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
           <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-slate-400 hover:text-white text-3xl">&times;</button>
         </div>
         
-        <div className="flex-1 overflow-y-auto px-6 custom-scrollbar">
+        <div className="overflow-y-auto px-6 custom-scrollbar" style={{maxHeight: 'calc(100vh - 320px)'}}>
           <h2 className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-5 px-1">Legal Categories</h2>
           <div className="flex flex-col gap-3">
             {domains.map((domain) => (
