@@ -69,7 +69,7 @@ async def process_voice_query(
                 'hi-IN': ("Maafi chahta hoon, mujhe aapki awaaz clearly nahi aayi. Kya aap thoda aur paas aakar ya thoda zyada awaaz mein bol sakte hain?", "shubh"),
                 'en-IN': ("I'm sorry, I couldn't hear you clearly. Could you please speak a little louder or move closer to the microphone?", "amelia"),
                 'od-IN': ("Maafi kariben, mo aapananka swara spashta shuniba pailena. Daya kari thoda jore ba kachha re katha kahanti?", "anand"),
-                'te-IN': ("Maafi cheyandi, meeru cheppindi naaku spashtanga vinipinchaledhu. Dayachesi kodhigaa dooramga vachi matladagalara?", "tanya"),
+                'te-IN': ("Maafi cheyandi, meeru cheppindi naaku spashtanga vinipinchaledhu. Dayachesi kodhigaa dooramga vachi matladagalara?", "arvind"),
             }
             sorry_text, sorry_speaker = sorry_map.get(detected_lang, sorry_map['hi-IN'])
             tts_sorry = requests.post(
@@ -145,7 +145,7 @@ async def process_voice_query(
             'hi-IN': 'shubh',
             'en-IN': 'amelia',
             'od-IN': 'anand',
-            'te-IN': 'tanya',
+            'te-IN': 'arvind',
             'bn-IN': 'shubh',
             'ta-IN': 'shubh',
             'mr-IN': 'shubh',
