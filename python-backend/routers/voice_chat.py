@@ -31,8 +31,9 @@ async def process_voice_query(
             f.write(raw_bytes)
 
         # 2. Convert to 16kHz mono WAV using ffmpeg
+        ffmpeg_path = "/opt/homebrew/bin/ffmpeg" if os.path.exists("/opt/homebrew/bin/ffmpeg") else "ffmpeg"
         result = subprocess.run(
-            ["/opt/homebrew/bin/ffmpeg", "-y", "-i", temp_input, "-ar", "16000", "-ac", "1", "-f", "wav", temp_wav],
+            [ffmpeg_path, "-y", "-i", temp_input, "-ar", "16000", "-ac", "1", "-f", "wav", temp_wav],
             capture_output=True, text=True
         )
         print(f"🔧 ffmpeg exit: {result.returncode}")

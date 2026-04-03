@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+import threading
 from contextlib import asynccontextmanager
 
 from routers import text_chat, voice_chat, doc_gen
@@ -13,9 +14,11 @@ load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("🚀 Starting up — ingesting PDFs into vector DB...")
-    result = ingest_pdfs()
-    print(f"📚 RAG ready: {result}")
+    def _ingest():
+        print("🚀 Background ingestion starting...")
+        result = ingest_pdfs()
+        print(f"📚 RAG ready: {result}")
+    threading.Thread(target=_ingest, daemon=True).start()
     yield
 
 app = FastAPI(title="Vidhan.ai Core Engine", lifespan=lifespan)

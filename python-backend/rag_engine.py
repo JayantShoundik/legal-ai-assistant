@@ -1,22 +1,36 @@
 import os
 import chromadb
 from pypdf import PdfReader
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
-CHROMA_DIR = os.path.join(os.path.dirname(__file__), "chroma_db")
 COLLECTION_NAME = "legal_docs"
 
-embedding_fn = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
-chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
+genai.configure(api_key=os.getenv("GEMINI_API_KEY", ""))
+
+# Use in-memory client — no disk persistence needed on Render (rebuilt each deploy)
+chroma_client = chromadb.Client()
+
+class GeminiEmbeddingFunction(chromadb.EmbeddingFunction):
+    def __call__(self, input):
+        result = genai.embed_content(
+            model="models/text-embedding-004",
+            content=input,
+            task_type="retrieval_document"
+        )
+        return result["embedding"] if isinstance(input, str) else result["embeddings"]
+
+embedding_fn = GeminiEmbeddingFunction()
 collection = chroma_client.get_or_create_collection(
     name=COLLECTION_NAME,
     embedding_function=embedding_fn
 )
 
 
-def _chunk_text(text: str, chunk_size: int = 500, overlap: int = 100) -> list[str]:
-    """Split text into overlapping chunks."""
+def _chunk_text(text: str, chunk_size: int = 500, overlap: int = 100) -> list:
     chunks = []
     start = 0
     while start < len(text):
@@ -27,10 +41,12 @@ def _chunk_text(text: str, chunk_size: int = 500, overlap: int = 100) -> list[st
 
 
 def ingest_pdfs() -> dict:
-    """Load all PDFs and TXT files from data/ folder into ChromaDB."""
+    if not os.path.exists(DATA_DIR):
+        return {"status": "no_data_dir", "ingested": [], "total_chunks": 0}
+
     files = [f for f in os.listdir(DATA_DIR) if f.endswith(".pdf") or f.endswith(".txt")]
     if not files:
-        return {"status": "no_files", "message": f"No PDFs/TXTs found in {DATA_DIR}"}
+        return {"status": "no_files", "ingested": [], "total_chunks": 0}
 
     ingested = []
     for filename in files:
@@ -49,9 +65,7 @@ def ingest_pdfs() -> dict:
                 full_text = f.read()
 
         chunks = _chunk_text(full_text)
-
-        # Add to ChromaDB in batches
-        batch_size = 100
+        batch_size = 50
         for i in range(0, len(chunks), batch_size):
             batch = chunks[i:i + batch_size]
             collection.add(
@@ -66,9 +80,20 @@ def ingest_pdfs() -> dict:
 
 
 def retrieve_context(query: str, n_results: int = 4) -> str:
-    """Search vector DB and return top matching legal text chunks."""
     if collection.count() == 0:
         return ""
-    results = collection.query(query_texts=[query], n_results=min(n_results, collection.count()))
-    docs = results.get("documents", [[]])[0]
-    return "\n\n---\n\n".join(docs)
+    try:
+        embedding = genai.embed_content(
+            model="models/text-embedding-004",
+            content=query,
+            task_type="retrieval_query"
+        )
+        results = collection.query(
+            query_embeddings=[embedding["embedding"]],
+            n_results=min(n_results, collection.count())
+        )
+        docs = results.get("documents", [[]])[0]
+        return "\n\n---\n\n".join(docs)
+    except Exception as e:
+        print(f"⚠️ RAG retrieve error: {e}")
+        return ""
