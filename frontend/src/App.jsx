@@ -610,6 +610,26 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
           </div>
         </div>
 
+        <div className={`px-6 pb-2 border-t pt-4 ${ecoMode ? 'border-[#1C3D2E]' : 'border-[#1C2640]'}`}>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">🏛️ Govt Portals</p>
+          <div className="flex flex-col gap-2">
+            {[
+              { label: '📋 eParhvain', url: 'https://echallan.parivahan.gov.in' },
+              { label: '🏠 Nis Jago Grahak Jago', url: 'https://consumerhelpline.gov.in' },
+              { label: '🚔 National Police Portal', url: 'https://nationalpolice.nic.in' },
+              { label: '⚖️ eCourts', url: 'https://ecourts.gov.in' },
+              { label: '📝 RTI Online', url: 'https://rtionline.gov.in' },
+              { label: '👷 Shram Suvidha', url: 'https://shramsuvidha.gov.in' },
+            ].map(({ label, url }) => (
+              <a key={url} href={url} target="_blank" rel="noopener noreferrer"
+                className={`text-xs font-semibold px-3 py-2 rounded-xl transition-all flex items-center justify-between group ${ecoMode ? 'bg-[#0A1A14] text-emerald-400/70 hover:text-emerald-300 hover:bg-[#132A20] border border-[#1C3D2E]' : 'bg-[#0B132B]/60 text-slate-400 hover:text-white hover:bg-white/10 border border-white/5'}`}>
+                {label}
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px]">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
         <div className={`p-6 mt-4 border-t flex flex-col gap-4 ${ecoMode ? 'border-[#1C3D2E]' : 'border-[#1C2640]'}`}>
           <div className="flex items-center gap-3 px-1">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs uppercase border ${ecoMode ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'}`}>
