@@ -588,7 +588,7 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
           <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-slate-400 hover:text-white text-3xl">&times;</button>
         </div>
         
-        <div className="overflow-y-auto px-6 custom-scrollbar" style={{maxHeight: 'calc(100vh - 320px)'}}>
+        <div className="overflow-y-auto px-6 custom-scrollbar flex-1">
           <h2 className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-5 px-1">Legal Categories</h2>
           <div className="flex flex-col gap-3">
             {domains.map((domain) => (
@@ -647,7 +647,7 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
       <div className="flex-1 flex flex-col h-screen relative min-w-0">
         
         {/* Header */}
-        <div className={`h-20 backdrop-blur-xl border-b flex items-center justify-between px-4 md:px-8 shrink-0 z-10 transition-colors duration-700 ${ecoMode ? 'bg-[#0A1A14]/90 border-[#1C3D2E]' : 'bg-white/80 border-slate-200'}`}>
+        <div className={`h-14 md:h-20 backdrop-blur-xl border-b flex items-center justify-between px-3 md:px-8 shrink-0 z-10 transition-colors duration-700 ${ecoMode ? 'bg-[#0A1A14]/90 border-[#1C3D2E]' : 'bg-white/80 border-slate-200'}`}>
           <div className="flex items-center gap-3 md:gap-4">
             <button onClick={() => setIsSidebarOpen(true)} className={`md:hidden p-2 rounded-xl border ${ecoMode ? 'text-emerald-400 border-[#1C3D2E]' : 'text-slate-600 border-slate-200'}`}>
               ☰
@@ -686,16 +686,16 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
             </button>
 
             {/* Mode Switcher */}
-            <div className={`flex p-1 md:p-1.5 rounded-xl border shadow-inner ${ecoMode ? 'bg-[#050D0A] border-[#1C3D2E]' : 'bg-slate-100 border-slate-200'}`}>
-              <button onClick={() => {setMode('text'); if(isRecording) stopRecording();}} className={`px-3 md:px-5 py-1 md:py-1.5 text-[10px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'text' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Text</button>
-              <button onClick={() => setMode('voice')} className={`px-3 md:px-5 py-1 md:py-1.5 text-[10px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'voice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Voice</button>
-              <button onClick={() => { setMode('notice'); if(isRecording) stopRecording(); }} className={`px-3 md:px-5 py-1 md:py-1.5 text-[10px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'notice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>📋 Notice</button>
+            <div className={`flex p-0.5 md:p-1.5 rounded-xl border shadow-inner ${ecoMode ? 'bg-[#050D0A] border-[#1C3D2E]' : 'bg-slate-100 border-slate-200'}`}>
+              <button onClick={() => {setMode('text'); if(isRecording) stopRecording();}} className={`px-2 md:px-5 py-1 md:py-1.5 text-[9px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'text' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Text</button>
+              <button onClick={() => setMode('voice')} className={`px-2 md:px-5 py-1 md:py-1.5 text-[9px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'voice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Voice</button>
+              <button onClick={() => { setMode('notice'); if(isRecording) stopRecording(); }} className={`px-2 md:px-5 py-1 md:py-1.5 text-[9px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'notice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>📋</button>
             </div>
           </div>
         </div>
 
         {/* Dynamic Workspace Area */}
-        <div className="flex-1 p-4 md:p-10 flex flex-col overflow-y-auto custom-scrollbar relative">
+        <div className="flex-1 p-3 md:p-10 flex flex-col overflow-y-auto custom-scrollbar relative">
           
           <div className="w-full max-w-4xl mx-auto flex-1 mb-8 flex flex-col gap-6">
             
