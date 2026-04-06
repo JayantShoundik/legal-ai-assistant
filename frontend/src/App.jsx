@@ -986,14 +986,7 @@ const AboutPage = ({ ecoMode }) => {
     { icon: '🤝', title: 'Community Driven', desc: 'Built with feedback from real users facing real legal problems across India.' },
   ];
 
-  const milestones = [
-    { year: '2024', event: 'Idea born — frustrated by how inaccessible Indian legal help is for common people.' },
-    { year: 'Early 2025', event: 'First version built with text chat, BNS 2023 RAG, and multilingual support.' },
-    { year: 'Mid 2025', event: 'Voice assistant added with Sarvam AI — speak in Hindi, Telugu, Odia.' },
-    { year: 'Late 2025', event: 'Notice Analyzer launched — upload any legal document and get plain-language explanation.' },
-    { year: '2026', event: 'Deployed live at vidhan-law.xyz — serving users across India.' },
-    { year: 'Future', event: 'Real lawyer connect, CA advisory, court tracking and premium document studio.' },
-  ];
+  const milestones = [];
 
   return (
     <div className={`min-h-screen font-sans flex flex-col overflow-x-hidden transition-colors duration-700 ${bg}`}>
@@ -1080,24 +1073,6 @@ const AboutPage = ({ ecoMode }) => {
                     ✉️ Email
                   </a>
                 )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="py-14 px-4 md:px-12">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <span className={`text-xs font-bold uppercase tracking-widest mb-3 block ${accent}`}>Journey</span>
-            <h2 className={`text-2xl md:text-3xl font-extrabold ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>How We Got Here</h2>
-          </div>
-          <div className="flex flex-col gap-4">
-            {milestones.map((m, i) => (
-              <div key={i} className={`flex gap-4 p-5 rounded-2xl border ${card}`}>
-                <span className={`text-xs font-extrabold uppercase tracking-wider min-w-[80px] pt-0.5 ${accent}`}>{m.year}</span>
-                <p className={`text-sm leading-relaxed ${sub}`}>{m.event}</p>
               </div>
             ))}
           </div>
