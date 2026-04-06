@@ -186,7 +186,8 @@ const MotherJusticeLogo = ({ className = "w-14 h-14", isDark = false }) => (
 // 3. LANDING PAGE
 // ==========================================
 const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
-  const [birdState, setBirdState] = useState('hidden'); // 'hidden', 'flying', 'landed'
+  const [birdState, setBirdState] = useState('hidden');
+  const [menuOpen, setMenuOpen] = useState(false);
   const t = translations[lang];
 
   if (user) return <Navigate to="/workspace" />;
@@ -210,6 +211,8 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
     }
   };
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className={`min-h-screen font-sans transition-colors duration-1000 flex flex-col overflow-x-hidden ${ecoMode ? 'bg-[#0A1A14] text-[#E8F5EE]' : 'bg-[#FDFBF7] text-slate-800'}`}>
       
@@ -228,30 +231,59 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
         </div>
       </div>
 
-      <nav className="w-full max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative z-20 animate-in fade-in">
-         <div className="flex items-center gap-2 md:gap-4">
-           <MotherJusticeLogo className="w-9 h-9 md:w-14 md:h-14" isDark={ecoMode} />
-           <span className={`font-extrabold text-lg md:text-2xl tracking-tight ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Vidhan.ai</span>
-         </div>
-         
-         <div className="flex items-center gap-2 md:gap-6">
-           <button onClick={callBird} className={`text-xs font-bold px-3 py-1.5 md:px-5 md:py-2.5 rounded-full border transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300 hover:bg-[#1C3D2E]' : 'bg-white border-slate-200 text-teal-700 hover:shadow-md'}`}>
-             {birdState === 'hidden' ? t.birdCall : t.birdShoo}
-           </button>
+      {/* Mobile dropdown menu */}
+      {menuOpen && (
+        <div className={`fixed inset-0 z-40 md:hidden`} onClick={() => setMenuOpen(false)}>
+          <div className={`absolute top-16 right-4 w-52 rounded-2xl shadow-2xl border p-3 flex flex-col gap-2 ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E]' : 'bg-white border-slate-200'}`}
+            onClick={e => e.stopPropagation()}>
+            {/* Language */}
+            <p className={`text-[10px] font-bold uppercase tracking-widest px-2 ${ecoMode ? 'text-emerald-500' : 'text-slate-400'}`}>Language</p>
+            {[['en','English'],['hi','हिंदी'],['od','ଓଡ଼ିଆ']].map(([code, label]) => (
+              <button key={code} onClick={() => { setLang(code); setMenuOpen(false); }}
+                className={`px-3 py-2 rounded-xl text-sm font-bold text-left transition-all ${lang === code ? (ecoMode ? 'bg-emerald-600 text-white' : 'bg-teal-600 text-white') : (ecoMode ? 'text-emerald-300 hover:bg-[#132A20]' : 'text-slate-600 hover:bg-slate-50')}`}>
+                {label}
+              </button>
+            ))}
+            <div className={`border-t my-1 ${ecoMode ? 'border-[#1C3D2E]' : 'border-slate-100'}`} />
+            {/* Eco Mode */}
+            <button onClick={() => { setEcoMode(!ecoMode); setMenuOpen(false); }}
+              className={`px-3 py-2 rounded-xl text-sm font-bold text-left flex items-center gap-2 transition-all ${ecoMode ? 'bg-emerald-600/20 text-emerald-300' : 'text-slate-600 hover:bg-slate-50'}`}>
+              {ecoMode ? '🌿 Calm Mode ON' : '☀️ Focus Mode OFF'}
+            </button>
+          </div>
+        </div>
+      )}
 
-           <label className="flex items-center cursor-pointer gap-2 group">
-             <span className={`hidden md:block text-xs font-bold uppercase tracking-wider transition-colors ${ecoMode ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'}`}>
-               {ecoMode ? 'Calm Mode' : 'Focus Mode'}
-             </span>
-             <div className="relative">
-               <input type="checkbox" className="sr-only" checked={ecoMode} onChange={() => setEcoMode(!ecoMode)} />
-               <div className={`block w-10 h-6 md:w-14 md:h-8 rounded-full transition-colors duration-500 ${ecoMode ? 'bg-emerald-600' : 'bg-slate-300'}`}></div>
-               <div className={`absolute left-1 top-1 bg-white w-4 h-4 md:w-6 md:h-6 rounded-full transition-transform duration-500 flex items-center justify-center shadow-sm ${ecoMode ? 'transform translate-x-4 md:translate-x-6' : ''}`}>
-                 {ecoMode ? <span className="text-[9px] md:text-[12px]">🌿</span> : <span className="text-[9px] md:text-[12px]">☀️</span>}
-               </div>
-             </div>
-           </label>
-         </div>
+      <nav className="w-full max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative z-20 animate-in fade-in">
+        {/* Logo */}
+        <div className="flex items-center gap-2 md:gap-4">
+          <MotherJusticeLogo className="w-9 h-9 md:w-14 md:h-14" isDark={ecoMode} />
+          <span className={`font-extrabold text-lg md:text-2xl tracking-tight ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Vidhan.ai</span>
+        </div>
+
+        {/* Desktop nav items */}
+        <div className="hidden md:flex items-center gap-6">
+          <button onClick={callBird} className={`text-sm font-bold px-5 py-2.5 rounded-full border transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300 hover:bg-[#1C3D2E]' : 'bg-white border-slate-200 text-teal-700 hover:shadow-md'}`}>
+            {birdState === 'hidden' ? t.birdCall : t.birdShoo}
+          </button>
+          <label className="flex items-center cursor-pointer gap-2 group">
+            <span className={`text-xs font-bold uppercase tracking-wider transition-colors ${ecoMode ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'}`}>
+              {ecoMode ? 'Calm Mode' : 'Focus Mode'}
+            </span>
+            <div className="relative">
+              <input type="checkbox" className="sr-only" checked={ecoMode} onChange={() => setEcoMode(!ecoMode)} />
+              <div className={`block w-14 h-8 rounded-full transition-colors duration-500 ${ecoMode ? 'bg-emerald-600' : 'bg-slate-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-500 flex items-center justify-center shadow-sm ${ecoMode ? 'transform translate-x-6' : ''}`}>
+                {ecoMode ? <span className="text-[12px]">🌿</span> : <span className="text-[12px]">☀️</span>}
+              </div>
+            </div>
+          </label>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button onClick={() => setMenuOpen(!menuOpen)} className={`md:hidden p-2 rounded-xl border transition-all ${ecoMode ? 'border-[#1C3D2E] text-emerald-400 bg-[#132A20]' : 'border-slate-200 text-slate-600 bg-white'}`}>
+          {menuOpen ? '✕' : '☰'}
+        </button>
       </nav>
 
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 pt-8 pb-16 md:pt-12 md:pb-24 flex flex-col items-center text-center relative z-10">
