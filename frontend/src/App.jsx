@@ -727,7 +727,7 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
             <div className="relative md:hidden">
               <button onClick={() => setWsMenuOpen(!wsMenuOpen)}
                 className={`p-2 rounded-xl border font-bold text-lg ${ecoMode ? 'border-[#1C3D2E] text-emerald-400 bg-[#132A20]' : 'border-slate-200 text-slate-600 bg-white'}`}>
-                ⋮
+                &nbsp;&nbsp;⋮&nbsp;&nbsp;
               </button>
               {wsMenuOpen && (
                 <div className={`absolute right-0 top-10 w-48 rounded-2xl shadow-2xl border z-50 p-2 flex flex-col gap-1 ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E]' : 'bg-white border-slate-200'}`}
