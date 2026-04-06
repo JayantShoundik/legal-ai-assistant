@@ -187,7 +187,7 @@ const MotherJusticeLogo = ({ className = "w-14 h-14", isDark = false }) => (
 // ==========================================
 const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
   const [birdState, setBirdState] = useState('hidden');
-  const [menuOpen, setMenuOpen] = useState(false);
+  // const [menuOpen, setMenuOpen] = useState(false);
   const t = translations[lang];
 
   if (user) return <Navigate to="/workspace" />;
