@@ -380,6 +380,7 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
   
   // Mobile Sidebar Toggle
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [wsMenuOpen, setWsMenuOpen] = useState(false);
 
   const noticeInputRef = useRef(null);
   const chatHistoryRef = useRef([]);
@@ -691,7 +692,7 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
           </div>
           
           <div className="flex items-center gap-3 md:gap-5">
-            {/* Eco Mode Toggle for Workspace */}
+            {/* Eco Mode Toggle - desktop only */}
             <label className="hidden md:flex items-center cursor-pointer gap-2 group mr-2">
                <div className="relative">
                  <input type="checkbox" className="sr-only" checked={ecoMode} onChange={() => setEcoMode(!ecoMode)} />
@@ -702,26 +703,60 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
                </div>
             </label>
 
-            {/* Language Selector for Workspace */}
-            <select 
-              value={lang} 
-              onChange={(e) => setLang(e.target.value)}
-              className={`hidden md:block text-xs font-bold px-3 py-2 rounded-xl border outline-none transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300' : 'bg-slate-50 border-slate-200 text-slate-600'}`}
-            >
+            {/* Language Selector - desktop only */}
+            <select value={lang} onChange={(e) => setLang(e.target.value)}
+              className={`hidden md:block text-xs font-bold px-3 py-2 rounded-xl border outline-none transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300' : 'bg-slate-50 border-slate-200 text-slate-600'}`}>
               <option value="en">English</option>
               <option value="hi">हिंदी</option>
               <option value="od">ଓଡ଼ିଆ</option>
             </select>
 
-            <button onClick={() => window.location.href='/premium'} className={`flex px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-bold rounded-xl transition-all duration-300 items-center gap-2 shadow-sm border hover:-translate-y-0.5 ${ecoMode ? 'bg-[#132A20] text-emerald-400 border-emerald-500/30 hover:bg-emerald-900/50' : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'}`}>
-              ⚡ <span className="hidden md:inline">{t.w_quick}</span><span className="md:hidden">Pro</span>
+            {/* Pro button - desktop only */}
+            <button onClick={() => window.location.href='/premium'} className={`hidden md:flex px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 items-center gap-2 shadow-sm border hover:-translate-y-0.5 ${ecoMode ? 'bg-[#132A20] text-emerald-400 border-emerald-500/30 hover:bg-emerald-900/50' : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'}`}>
+              ⚡ {t.w_quick}
             </button>
 
-            {/* Mode Switcher */}
-            <div className={`flex p-0.5 md:p-1.5 rounded-xl border shadow-inner ${ecoMode ? 'bg-[#050D0A] border-[#1C3D2E]' : 'bg-slate-100 border-slate-200'}`}>
-              <button onClick={() => {setMode('text'); if(isRecording) stopRecording();}} className={`px-2 md:px-5 py-1 md:py-1.5 text-[9px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'text' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Text</button>
-              <button onClick={() => setMode('voice')} className={`px-2 md:px-5 py-1 md:py-1.5 text-[9px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'voice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Voice</button>
-              <button onClick={() => { setMode('notice'); if(isRecording) stopRecording(); }} className={`px-2 md:px-5 py-1 md:py-1.5 text-[9px] md:text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'notice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>📋</button>
+            {/* Mode Switcher - desktop only */}
+            <div className={`hidden md:flex p-1.5 rounded-xl border shadow-inner ${ecoMode ? 'bg-[#050D0A] border-[#1C3D2E]' : 'bg-slate-100 border-slate-200'}`}>
+              <button onClick={() => {setMode('text'); if(isRecording) stopRecording();}} className={`px-5 py-1.5 text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'text' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Text</button>
+              <button onClick={() => setMode('voice')} className={`px-5 py-1.5 text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'voice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>Voice</button>
+              <button onClick={() => { setMode('notice'); if(isRecording) stopRecording(); }} className={`px-5 py-1.5 text-xs font-bold uppercase tracking-wide transition-all duration-300 rounded-lg ${mode === 'notice' ? (ecoMode ? 'bg-[#1A382B] text-emerald-300 shadow-sm' : 'bg-white shadow-sm text-indigo-700') : (ecoMode ? 'text-emerald-500/50 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-700')}`}>📋 Notice</button>
+            </div>
+
+            {/* Mobile ⋮ menu button */}
+            <div className="relative md:hidden">
+              <button onClick={() => setWsMenuOpen(!wsMenuOpen)}
+                className={`p-2 rounded-xl border font-bold text-lg ${ecoMode ? 'border-[#1C3D2E] text-emerald-400 bg-[#132A20]' : 'border-slate-200 text-slate-600 bg-white'}`}>
+                ⋮
+              </button>
+              {wsMenuOpen && (
+                <div className={`absolute right-0 top-10 w-48 rounded-2xl shadow-2xl border z-50 p-2 flex flex-col gap-1 ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E]' : 'bg-white border-slate-200'}`}
+                  onClick={() => setWsMenuOpen(false)}>
+                  {/* Mode buttons */}
+                  <p className={`text-[10px] font-bold uppercase tracking-widest px-2 pt-1 ${ecoMode ? 'text-emerald-500' : 'text-slate-400'}`}>Mode</p>
+                  {[['text','💬 Text', () => {setMode('text'); if(isRecording) stopRecording();}],
+                    ['voice','🎙️ Voice', () => setMode('voice')],
+                    ['notice','📋 Notice', () => {setMode('notice'); if(isRecording) stopRecording();}]
+                  ].map(([m, label, action]) => (
+                    <button key={m} onClick={action}
+                      className={`px-3 py-2 rounded-xl text-sm font-bold text-left transition-all ${mode === m ? (ecoMode ? 'bg-emerald-600 text-white' : 'bg-indigo-600 text-white') : (ecoMode ? 'text-emerald-300 hover:bg-[#132A20]' : 'text-slate-600 hover:bg-slate-50')}`}>
+                      {label}
+                    </button>
+                  ))}
+                  <div className={`border-t my-1 ${ecoMode ? 'border-[#1C3D2E]' : 'border-slate-100'}`} />
+                  {/* Pro */}
+                  <button onClick={() => window.location.href='/premium'}
+                    className={`px-3 py-2 rounded-xl text-sm font-bold text-left ${ecoMode ? 'text-emerald-300 hover:bg-[#132A20]' : 'text-indigo-600 hover:bg-indigo-50'}`}>
+                    ⚡ Pro Features
+                  </button>
+                  <div className={`border-t my-1 ${ecoMode ? 'border-[#1C3D2E]' : 'border-slate-100'}`} />
+                  {/* Eco toggle */}
+                  <button onClick={() => setEcoMode(!ecoMode)}
+                    className={`px-3 py-2 rounded-xl text-sm font-bold text-left ${ecoMode ? 'text-emerald-300 hover:bg-[#132A20]' : 'text-slate-600 hover:bg-slate-50'}`}>
+                    {ecoMode ? '🌿 Calm Mode ON' : '☀️ Focus Mode'}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
