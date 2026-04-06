@@ -957,8 +957,159 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
 };
 
 // ==========================================
-// 5. PREMIUM PAGE
+// 5. ABOUT US PAGE
 // ==========================================
+const AboutPage = ({ ecoMode }) => {
+  const bg = ecoMode ? 'bg-[#0A1A14] text-[#E8F5EE]' : 'bg-[#FDFBF7] text-slate-800';
+  const card = ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E]' : 'bg-white border-slate-200';
+  const accent = ecoMode ? 'text-emerald-400' : 'text-teal-600';
+  const sub = ecoMode ? 'text-[#B4D5C5]' : 'text-slate-500';
+  const section = ecoMode ? 'bg-[#06120E] border-[#1C3D2E]' : 'bg-white border-slate-100';
+
+  const team = [
+    { name: 'Jayant Shoundik', role: 'Founder & Full Stack Developer', emoji: '👨‍💻', desc: 'Built Vidhan.ai from scratch with a vision to make Indian law accessible to every citizen.' },
+    { name: 'AI Legal Engine', role: 'Powered by Gemini 2.5 Flash', emoji: '🤖', desc: 'Our AI is trained on BNS 2023, Motor Vehicles Act, and other key Indian legal frameworks.' },
+    { name: 'Sarvam AI', role: 'Voice & Language Partner', emoji: '🎙️', desc: 'Multilingual voice support in Hindi, Telugu, Odia, English and more Indian languages.' },
+  ];
+
+  const values = [
+    { icon: '⚖️', title: 'Justice for All', desc: 'Legal help should not be a privilege. Every Indian deserves to know their rights — in their own language.' },
+    { icon: '🔒', title: 'Privacy First', desc: 'We never store your conversations. Your legal queries are private and secure.' },
+    { icon: '🆓', title: 'Always Free', desc: 'Core features are and will always remain free. No hidden charges, no paywalls for basic rights.' },
+    { icon: '🌐', title: 'Multilingual', desc: 'Built for Bharat — Hindi, Telugu, Odia, English and more. Your language, your law.' },
+    { icon: '🚀', title: 'AI-Powered', desc: 'Using the latest Gemini AI to give you accurate, up-to-date legal guidance based on real Indian laws.' },
+    { icon: '🤝', title: 'Community Driven', desc: 'Built with feedback from real users facing real legal problems across India.' },
+  ];
+
+  const milestones = [
+    { year: '2024', event: 'Idea born — frustrated by how inaccessible Indian legal help is for common people.' },
+    { year: 'Early 2025', event: 'First version built with text chat, BNS 2023 RAG, and multilingual support.' },
+    { year: 'Mid 2025', event: 'Voice assistant added with Sarvam AI — speak in Hindi, Telugu, Odia.' },
+    { year: 'Late 2025', event: 'Notice Analyzer launched — upload any legal document and get plain-language explanation.' },
+    { year: '2026', event: 'Deployed live at vidhan-law.xyz — serving users across India.' },
+    { year: 'Future', event: 'Real lawyer connect, CA advisory, court tracking and premium document studio.' },
+  ];
+
+  return (
+    <div className={`min-h-screen font-sans flex flex-col overflow-x-hidden transition-colors duration-700 ${bg}`}>
+      {/* Header */}
+      <div className={`px-4 md:px-12 py-4 border-b flex items-center justify-between ${ecoMode ? 'bg-[#0A1A14]/90 border-[#1C3D2E]' : 'bg-white/80 border-slate-200'} backdrop-blur-xl sticky top-0 z-20`}>
+        <button onClick={() => window.history.back()} className={`flex items-center gap-2 text-sm font-bold transition-all ${ecoMode ? 'text-emerald-400/70 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-800'}`}>
+          ← Back
+        </button>
+        <div className="flex items-center gap-2">
+          <MotherJusticeLogo className="w-7 h-7" isDark={ecoMode} />
+          <span className="font-extrabold text-base tracking-tight">Vidhan.ai</span>
+        </div>
+        <span className={`text-xs font-bold ${accent}`}>About Us</span>
+      </div>
+
+      {/* Hero */}
+      <div className="relative px-4 md:px-12 py-16 md:py-24 text-center overflow-hidden">
+        <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] blur-[120px] rounded-full pointer-events-none ${ecoMode ? 'bg-emerald-500/10' : 'bg-teal-200/40'}`} />
+        <div className="relative z-10">
+          <span className={`text-xs font-bold uppercase tracking-widest mb-4 block ${accent}`}>Our Story</span>
+          <h1 className={`text-3xl md:text-5xl font-extrabold mb-6 tracking-tight leading-tight ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>
+            Legal Help for <span className={`${ecoMode ? 'text-emerald-400' : 'text-teal-600'}`}>Every Indian</span>
+          </h1>
+          <p className={`text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-medium ${sub}`}>
+            Vidhan.ai was born from a simple belief — no one should face a legal problem alone just because they can't afford a lawyer or don't understand complex legal language.
+          </p>
+        </div>
+      </div>
+
+      {/* Mission */}
+      <section className={`py-14 px-4 md:px-12 border-t ${section}`}>
+        <div className="max-w-4xl mx-auto text-center">
+          <span className={`text-xs font-bold uppercase tracking-widest mb-3 block ${accent}`}>Our Mission</span>
+          <h2 className={`text-2xl md:text-3xl font-extrabold mb-6 ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Democratizing Legal Access in India</h2>
+          <p className={`text-base leading-relaxed max-w-3xl mx-auto ${sub}`}>
+            India has over 1.4 billion people but only ~1.7 million lawyers. Most citizens — especially in rural areas — have no access to legal guidance when they face a traffic challan, a workplace dispute, a consumer fraud, or a police complaint. Vidhan.ai bridges this gap using AI, voice technology, and plain language explanations in multiple Indian languages.
+          </p>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-14 px-4 md:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <span className={`text-xs font-bold uppercase tracking-widest mb-3 block ${accent}`}>What We Stand For</span>
+            <h2 className={`text-2xl md:text-3xl font-extrabold ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Our Core Values</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            {values.map(v => (
+              <div key={v.title} className={`p-6 rounded-3xl border transition-all hover:-translate-y-1 ${card}`}>
+                <div className="text-3xl mb-3">{v.icon}</div>
+                <h3 className={`font-extrabold text-sm mb-2 ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>{v.title}</h3>
+                <p className={`text-xs leading-relaxed ${sub}`}>{v.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Team */}
+      <section className={`py-14 px-4 md:px-12 border-t ${section}`}>
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <span className={`text-xs font-bold uppercase tracking-widest mb-3 block ${accent}`}>The Team</span>
+            <h2 className={`text-2xl md:text-3xl font-extrabold ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Who Built This</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {team.map(m => (
+              <div key={m.name} className={`p-6 rounded-3xl border text-center transition-all hover:-translate-y-1 ${card}`}>
+                <div className="text-5xl mb-4">{m.emoji}</div>
+                <h3 className={`font-extrabold text-sm mb-1 ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>{m.name}</h3>
+                <p className={`text-xs font-bold mb-3 ${accent}`}>{m.role}</p>
+                <p className={`text-xs leading-relaxed ${sub}`}>{m.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="py-14 px-4 md:px-12">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <span className={`text-xs font-bold uppercase tracking-widest mb-3 block ${accent}`}>Journey</span>
+            <h2 className={`text-2xl md:text-3xl font-extrabold ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>How We Got Here</h2>
+          </div>
+          <div className="flex flex-col gap-4">
+            {milestones.map((m, i) => (
+              <div key={i} className={`flex gap-4 p-5 rounded-2xl border ${card}`}>
+                <span className={`text-xs font-extrabold uppercase tracking-wider min-w-[80px] pt-0.5 ${accent}`}>{m.year}</span>
+                <p className={`text-sm leading-relaxed ${sub}`}>{m.event}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className={`py-14 px-4 md:px-12 border-t text-center ${section}`}>
+        <div className="max-w-xl mx-auto">
+          <MotherJusticeLogo className="w-14 h-14 mx-auto mb-6" isDark={ecoMode} />
+          <h2 className={`text-2xl md:text-3xl font-extrabold mb-4 ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Ready to Know Your Rights?</h2>
+          <p className={`text-sm mb-8 ${sub}`}>Join thousands of Indians using Vidhan.ai to understand and protect their legal rights — for free.</p>
+          <button onClick={() => window.location.href='/'}
+            className={`px-8 py-4 rounded-full font-extrabold text-white transition-all hover:-translate-y-1 shadow-lg ${ecoMode ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40' : 'bg-teal-700 hover:bg-teal-600 shadow-teal-500/20'}`}>
+            Get Started Free →
+          </button>
+        </div>
+      </section>
+
+      <footer className={`py-6 text-center text-xs border-t flex flex-col gap-2 items-center ${ecoMode ? 'text-[#B4D5C5] border-[#1C3D2E]' : 'text-slate-400 border-slate-100'}`}>
+        <div className="flex gap-4">
+          <a href="/about" className={`font-bold hover:underline ${ecoMode ? 'text-emerald-400' : 'text-teal-600'}`}>About Us</a>
+          <a href="/premium" className={`font-bold hover:underline ${ecoMode ? 'text-emerald-400' : 'text-teal-600'}`}>Premium</a>
+        </div>
+        <span>© 2025 Vidhan.ai · Legal AI for Every Indian · vidhan-law.xyz</span>
+      </footer>
+    </div>
+  );
+};
+
 const PremiumPage = ({ user, ecoMode }) => {
   const templates = [
     { icon: '📝', title: 'RTI Application', desc: 'Right to Information to any govt dept' },
@@ -1114,6 +1265,7 @@ function App() {
         <Route path="/" element={<LandingPage user={user} lang={lang} setLang={setLang} ecoMode={ecoMode} setEcoMode={setEcoMode} />} />
         <Route path="/workspace" element={<Workspace user={user} lang={lang} setLang={setLang} ecoMode={ecoMode} setEcoMode={setEcoMode} />} />
         <Route path="/premium" element={<PremiumPage user={user} ecoMode={ecoMode} />} />
+        <Route path="/about" element={<AboutPage ecoMode={ecoMode} />} />
       </Routes>
     </Router>
   );
