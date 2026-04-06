@@ -187,7 +187,8 @@ const MotherJusticeLogo = ({ className = "w-14 h-14", isDark = false }) => (
 // ==========================================
 const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
   const [birdState, setBirdState] = useState('hidden');
-  // const [menuOpen, setMenuOpen] = useState(false);
+  const [aboutState, setAboutState] = useState('hidden');
+  const [menuOpen, setMenuOpen] = useState(false);
   const t = translations[lang];
 
   if (user) return <Navigate to="/workspace" />;
@@ -211,11 +212,45 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
     }
   };
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
+  const callAbout = () => {
+    if (aboutState === 'hidden') {
+      setAboutState('flying');
+      setTimeout(() => setAboutState('landed'), 1500);
+    } else {
+      setAboutState('hidden');
+    }
+  };
   return (
     <div className={`min-h-screen font-sans transition-colors duration-1000 flex flex-col overflow-x-hidden ${ecoMode ? 'bg-[#0A1A14] text-[#E8F5EE]' : 'bg-[#FDFBF7] text-slate-800'}`}>
       
+      {/* ABOUT US SCROLL (Landing Page Only) */}
+      <div className={`fixed z-50 transition-all duration-[1500ms] ease-in-out flex flex-col items-center gap-2
+          ${aboutState === 'hidden' ? '-bottom-20 -left-20 opacity-0 scale-50' :
+            aboutState === 'flying' ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-100 scale-125 motion-safe:animate-bounce' :
+            'bottom-24 left-8 opacity-100 scale-100 drop-shadow-2xl'}`}>
+        <div className={`backdrop-blur-md border p-2 rounded-2xl shadow-xl flex-col gap-3 transition-all duration-500 w-64 ${aboutState === 'landed' ? 'flex opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'} ${ecoMode ? 'bg-[#0A1A14]/95 border-[#1C3D2E]' : 'bg-white/95 border-slate-200'}`}>
+          <div className="flex items-center gap-3 px-2 pt-1">
+            <MotherJusticeLogo className="w-8 h-8" isDark={ecoMode} />
+            <div>
+              <p className={`text-xs font-extrabold ${ecoMode ? 'text-emerald-300' : 'text-slate-900'}`}>Vidhan.ai</p>
+              <p className={`text-[10px] ${ecoMode ? 'text-emerald-500/70' : 'text-slate-400'}`}>Legal AI for Every Indian</p>
+            </div>
+          </div>
+          <div className={`border-t px-2 pt-2 pb-1 flex flex-col gap-1.5 ${ecoMode ? 'border-[#1C3D2E]' : 'border-slate-100'}`}>
+            {[['👨‍💻','Built by Jayant Shoundik & Team'],['⚖️','Powered by BNS 2023 & Indian Laws'],['🎙️','Voice in Hindi, Telugu, Odia & more'],['🔒','100% Free & Private']].map(([icon, text]) => (
+              <p key={text} className={`text-[11px] font-medium flex items-center gap-2 ${ecoMode ? 'text-emerald-100/70' : 'text-slate-600'}`}><span>{icon}</span>{text}</p>
+            ))}
+          </div>
+          <a href="/about" className={`mx-2 mb-1 py-2 rounded-xl text-xs font-extrabold text-center transition-all ${ecoMode ? 'bg-emerald-600 text-white hover:bg-emerald-500' : 'bg-teal-700 text-white hover:bg-teal-600'}`}>
+            Read Full Story →
+          </a>
+          <button onClick={callAbout} className={`text-[10px] font-bold text-center pb-1 ${ecoMode ? 'text-emerald-500/50 hover:text-emerald-400' : 'text-slate-400 hover:text-slate-600'}`}>✕ Close</button>
+        </div>
+        <div className="text-5xl cursor-pointer hover:scale-110 transition-transform origin-bottom" onClick={callAbout}>
+          {aboutState === 'flying' ? '📜' : '⚖️'}
+        </div>
+      </div>
+
       {/* LANGUAGE BIRD (Landing Page Only) */}
       <div className={`fixed z-50 transition-all duration-[1500ms] ease-in-out flex flex-col items-center gap-2
           ${birdState === 'hidden' ? '-top-20 -right-20 opacity-0 scale-50' : 
@@ -250,6 +285,10 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
               className={`px-3 py-2 rounded-xl text-sm font-bold text-left flex items-center gap-2 transition-all ${ecoMode ? 'bg-emerald-600/20 text-emerald-300' : 'text-slate-600 hover:bg-slate-50'}`}>
               {ecoMode ? '🌿 Calm Mode ON' : '☀️ Focus Mode OFF'}
             </button>
+            <button onClick={() => { callAbout(); setMenuOpen(false); }}
+              className={`px-3 py-2 rounded-xl text-sm font-bold text-left transition-all ${ecoMode ? 'text-emerald-300 hover:bg-[#132A20]' : 'text-slate-600 hover:bg-slate-50'}`}>
+              ⚖️ Know About Us
+            </button>
           </div>
         </div>
       )}
@@ -265,6 +304,9 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
         <div className="hidden md:flex items-center gap-6">
           <button onClick={callBird} className={`text-sm font-bold px-5 py-2.5 rounded-full border transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300 hover:bg-[#1C3D2E]' : 'bg-white border-slate-200 text-teal-700 hover:shadow-md'}`}>
             {birdState === 'hidden' ? t.birdCall : t.birdShoo}
+          </button>
+          <button onClick={callAbout} className={`text-sm font-bold px-5 py-2.5 rounded-full border transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300 hover:bg-[#1C3D2E]' : 'bg-white border-slate-200 text-teal-700 hover:shadow-md'}`}>
+            {aboutState === 'hidden' ? '⚖️ About Us' : '💨 Hide'}
           </button>
           <label className="flex items-center cursor-pointer gap-2 group">
             <span className={`text-xs font-bold uppercase tracking-wider transition-colors ${ecoMode ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-600'}`}>
