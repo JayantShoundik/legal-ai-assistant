@@ -17,6 +17,22 @@
   }
 }
 
+/* Mobile portrait fixes */
+@media (max-width: 640px) {
+  * { -webkit-tap-highlight-color: transparent; }
+  body { overflow-x: hidden; }
+  
+  /* Prevent text overflow */
+  p, span, h1, h2, h3 { word-break: break-word; overflow-wrap: break-word; }
+  
+  /* Fix viewport height on mobile browsers */
+  .min-h-screen { min-height: 100dvh; }
+  .h-screen { height: 100dvh; }
+
+  /* Smooth scrolling */
+  .custom-scrollbar { -webkit-overflow-scrolling: touch; }
+}
+
 .hero {
   position: relative;
 

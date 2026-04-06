@@ -150,7 +150,7 @@ async def process_voice_query(
             'od-IN': 'anand',
             'te-IN': 'arvind',
             'bn-IN': 'shubh',
-            'ta-IN': 'shubh',
+            'ta-IN': 'kavya',
             'mr-IN': 'shubh',
         }
         speaker = speaker_map.get(lang_code, 'shubh')
@@ -166,7 +166,7 @@ async def process_voice_query(
                 "output_audio_codec": "mp3"
             }
         )
-        print(f"🔊 TTS status: {tts_response.status_code}")
+        print(f"🔊 TTS status: {tts_response.status_code} | {tts_response.text[:200]}")
         audio_base64 = tts_response.json().get("audios", [""])[0]
 
         return {"status": "success", "user_text": user_spoken_text, "reply": ai_data, "audio_base64": audio_base64}

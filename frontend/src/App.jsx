@@ -228,14 +228,14 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
         </div>
       </div>
 
-      <nav className="w-full max-w-6xl mx-auto px-6 py-6 flex justify-between items-center relative z-20 animate-in fade-in">
-         <div className="flex items-center gap-4">
-           <MotherJusticeLogo className="w-12 h-12 md:w-14 md:h-14" isDark={ecoMode} />
-           <span className={`font-extrabold text-xl md:text-2xl tracking-tight ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Vidhan.ai</span>
+      <nav className="w-full max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative z-20 animate-in fade-in">
+         <div className="flex items-center gap-2 md:gap-4">
+           <MotherJusticeLogo className="w-9 h-9 md:w-14 md:h-14" isDark={ecoMode} />
+           <span className={`font-extrabold text-lg md:text-2xl tracking-tight ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>Vidhan.ai</span>
          </div>
          
-         <div className="flex items-center gap-4 md:gap-6">
-           <button onClick={callBird} className={`text-xs md:text-sm font-bold px-4 py-2 md:px-5 md:py-2.5 rounded-full border transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300 hover:bg-[#1C3D2E]' : 'bg-white border-slate-200 text-teal-700 hover:shadow-md'}`}>
+         <div className="flex items-center gap-2 md:gap-6">
+           <button onClick={callBird} className={`text-xs font-bold px-3 py-1.5 md:px-5 md:py-2.5 rounded-full border transition-all ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300 hover:bg-[#1C3D2E]' : 'bg-white border-slate-200 text-teal-700 hover:shadow-md'}`}>
              {birdState === 'hidden' ? t.birdCall : t.birdShoo}
            </button>
 
@@ -245,16 +245,16 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
              </span>
              <div className="relative">
                <input type="checkbox" className="sr-only" checked={ecoMode} onChange={() => setEcoMode(!ecoMode)} />
-               <div className={`block w-12 h-7 md:w-14 md:h-8 rounded-full transition-colors duration-500 ${ecoMode ? 'bg-emerald-600' : 'bg-slate-300'}`}></div>
-               <div className={`absolute left-1 top-1 bg-white w-5 h-5 md:w-6 md:h-6 rounded-full transition-transform duration-500 flex items-center justify-center shadow-sm ${ecoMode ? 'transform translate-x-5 md:translate-x-6' : ''}`}>
-                 {ecoMode ? <span className="text-[10px] md:text-[12px]">🌿</span> : <span className="text-[10px] md:text-[12px]">☀️</span>}
+               <div className={`block w-10 h-6 md:w-14 md:h-8 rounded-full transition-colors duration-500 ${ecoMode ? 'bg-emerald-600' : 'bg-slate-300'}`}></div>
+               <div className={`absolute left-1 top-1 bg-white w-4 h-4 md:w-6 md:h-6 rounded-full transition-transform duration-500 flex items-center justify-center shadow-sm ${ecoMode ? 'transform translate-x-4 md:translate-x-6' : ''}`}>
+                 {ecoMode ? <span className="text-[9px] md:text-[12px]">🌿</span> : <span className="text-[9px] md:text-[12px]">☀️</span>}
                </div>
              </div>
            </label>
          </div>
       </nav>
 
-      <main className="flex-1 w-full max-w-4xl mx-auto px-6 pt-12 pb-24 flex flex-col items-center text-center relative z-10">
+      <main className="flex-1 w-full max-w-4xl mx-auto px-4 pt-8 pb-16 md:pt-12 md:pb-24 flex flex-col items-center text-center relative z-10">
         <div className={`absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[400px] blur-[120px] rounded-full pointer-events-none transition-colors duration-1000 ${ecoMode ? 'bg-[#10B981]/10' : 'bg-teal-100/50'}`}></div>
 
         <div className={`inline-flex items-center gap-2 px-5 py-2 rounded-full border text-xs font-bold tracking-wide mb-8 animate-in fade-in slide-in-from-bottom-4 transition-colors ${ecoMode ? 'bg-[#132A20] border-[#1C3D2E] text-emerald-300' : 'bg-white border-slate-200 text-teal-700 shadow-sm'}`}>
@@ -262,7 +262,7 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
           100% Free & Private Legal Help
         </div>
 
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-8 tracking-tight animate-in fade-in slide-in-from-bottom-6 delay-150 leading-[1.3] md:leading-[1.2]">
+        <h1 className="text-3xl md:text-6xl lg:text-7xl font-extrabold mb-6 md:mb-8 tracking-tight animate-in fade-in slide-in-from-bottom-6 delay-150 leading-[1.3] md:leading-[1.2]">
           <span className={`block mb-4 md:mb-3 ${ecoMode ? 'text-white' : 'text-slate-900'}`}>
             {t.breath}
           </span>
@@ -276,22 +276,22 @@ const LandingPage = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
           </span>
         </h1>
 
-        <p className={`text-lg md:text-xl font-medium max-w-2xl mb-12 animate-in fade-in slide-in-from-bottom-8 delay-300 leading-relaxed ${ecoMode ? 'text-[#B4D5C5]' : 'text-slate-600'}`}>
+        <p className={`text-base md:text-xl font-medium max-w-2xl mb-8 md:mb-12 animate-in fade-in slide-in-from-bottom-8 delay-300 leading-relaxed ${ecoMode ? 'text-[#B4D5C5]' : 'text-slate-600'}`}>
           {t.desc}
         </p>
 
         <button
           onClick={handleGoogleLogin}
-          className={`group relative inline-flex items-center justify-center px-10 py-5 font-bold text-white rounded-full overflow-hidden transition-all hover:-translate-y-1 hover:shadow-2xl animate-in fade-in zoom-in delay-500 ${ecoMode ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40' : 'bg-teal-700 hover:bg-teal-600 shadow-teal-500/20'}`}
+          className={`group relative inline-flex items-center justify-center px-7 py-4 md:px-10 md:py-5 font-bold text-white rounded-full overflow-hidden transition-all hover:-translate-y-1 hover:shadow-2xl animate-in fade-in zoom-in delay-500 ${ecoMode ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40' : 'bg-teal-700 hover:bg-teal-600 shadow-teal-500/20'}`}
         >
-          <div className="relative flex items-center gap-3">
-             <div className="bg-white p-1.5 rounded-full"><img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" /></div>
-             <span className="text-lg tracking-wide">{t.btn}</span>
+          <div className="relative flex items-center gap-2 md:gap-3">
+             <div className="bg-white p-1 md:p-1.5 rounded-full"><img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-4 h-4 md:w-5 md:h-5" /></div>
+             <span className="text-base md:text-lg tracking-wide">{t.btn}</span>
           </div>
         </button>
       </main>
 
-      <section className={`py-24 px-6 relative z-10 transition-colors duration-1000 border-t ${ecoMode ? 'bg-[#06120E] border-[#1C3D2E]' : 'bg-white border-slate-100'}`}>
+      <section className={`py-14 md:py-24 px-4 md:px-6 relative z-10 transition-colors duration-1000 border-t ${ecoMode ? 'bg-[#06120E] border-[#1C3D2E]' : 'bg-white border-slate-100'}`}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className={`text-3xl font-bold mb-4 tracking-tight ${ecoMode ? 'text-white' : 'text-slate-900'}`}>{t.how}</h2>
@@ -769,13 +769,13 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
           {/* INPUT AREA */}
           {mode === 'notice' ? (
             <div className="w-full max-w-4xl mx-auto shrink-0">
-              <div className={`rounded-3xl border shadow-xl p-6 md:p-8 ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E]' : 'bg-white border-slate-200'}`}>
+              <div className={`rounded-3xl border shadow-xl p-4 md:p-8 ${ecoMode ? 'bg-[#0A1A14] border-[#1C3D2E]' : 'bg-white border-slate-200'}`}>
                 <h3 className="text-lg font-bold mb-1">{t.w_notice_title}</h3>
                 <p className={`text-sm mb-6 ${ecoMode ? 'text-emerald-100/60' : 'text-slate-500'}`}>{t.w_notice_desc}</p>
 
                 <div
                   onClick={() => noticeInputRef.current?.click()}
-                  className={`w-full border-2 border-dashed rounded-2xl p-8 md:p-10 flex flex-col items-center justify-center cursor-pointer transition-all ${
+                  className={`w-full border-2 border-dashed rounded-2xl p-5 md:p-10 flex flex-col items-center justify-center cursor-pointer transition-all ${
                     noticeFile 
                     ? (ecoMode ? 'border-emerald-500 bg-[#132A20]' : 'border-indigo-400 bg-indigo-50') 
                     : (ecoMode ? 'border-[#1C3D2E] hover:border-emerald-500/50 hover:bg-[#132A20]' : 'border-slate-200 hover:border-indigo-300 hover:bg-slate-50')
@@ -844,10 +844,10 @@ const Workspace = ({ user, lang, setLang, ecoMode, setEcoMode }) => {
                 <textarea 
                   value={inputText} onChange={(e) => setInputText(e.target.value)} onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit(); } }}
                   placeholder={t.w_placeholder}
-                  className={`flex-1 bg-transparent focus:outline-none px-3 md:px-5 py-3 md:py-4 text-[14px] md:text-[15px] resize-none min-h-[50px] md:min-h-[60px] max-h-[150px] font-medium ${ecoMode ? 'text-emerald-50 placeholder:text-emerald-700' : 'text-slate-800 placeholder:text-slate-400'}`}
+                  className={`flex-1 bg-transparent focus:outline-none px-3 md:px-5 py-3 md:py-4 text-[13px] md:text-[15px] resize-none min-h-[44px] md:min-h-[60px] max-h-[120px] md:max-h-[150px] font-medium ${ecoMode ? 'text-emerald-50 placeholder:text-emerald-700' : 'text-slate-800 placeholder:text-slate-400'}`}
                   rows="1"
                 />
-                <button onClick={handleSubmit} disabled={isSubmitting || !inputText.trim()} className={`px-6 md:px-8 py-3 md:py-4 rounded-2xl transition-all duration-300 font-bold text-xs md:text-sm flex items-center justify-center min-w-[90px] md:min-w-[120px] shadow-sm mb-1 mr-1 ${ecoMode ? 'bg-emerald-600 hover:bg-emerald-500 text-white disabled:bg-[#1A382B] disabled:text-emerald-900' : 'bg-slate-900 hover:bg-indigo-600 text-white disabled:bg-slate-100 disabled:text-slate-400'}`}>
+                <button onClick={handleSubmit} disabled={isSubmitting || !inputText.trim()} className={`px-4 md:px-8 py-3 md:py-4 rounded-2xl transition-all duration-300 font-bold text-xs md:text-sm flex items-center justify-center min-w-[70px] md:min-w-[120px] shadow-sm mb-1 mr-1 ${ecoMode ? 'bg-emerald-600 hover:bg-emerald-500 text-white disabled:bg-[#1A382B] disabled:text-emerald-900' : 'bg-slate-900 hover:bg-indigo-600 text-white disabled:bg-slate-100 disabled:text-slate-400'}`}>
                    {isSubmitting ? <span className="animate-spin text-xl">⚙️</span> : t.w_submit}
                 </button>
               </>
