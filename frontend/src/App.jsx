@@ -967,7 +967,12 @@ const AboutPage = ({ ecoMode }) => {
   const section = ecoMode ? 'bg-[#06120E] border-[#1C3D2E]' : 'bg-white border-slate-100';
 
   const team = [
-    { name: 'Jayant Shoundik', role: 'Founder & Full Stack Developer', emoji: '👨‍💻', desc: 'Built Vidhan.ai from scratch with a vision to make Indian law accessible to every citizen.' },
+    { name: 'Jayant Shoundik', role: 'Founder & Full Stack Developer', emoji: '👨‍💻', desc: 'Built Vidhan.ai from scratch with a vision to make Indian law accessible to every citizen.', link: 'https://www.linkedin.com/in/jayantshoundik9876/', founder: true },
+    { name: 'Harsh Raj Dubey', role: 'Core Team Member', emoji: '👨‍💼', desc: 'Contributing to the growth and development of Vidhan.ai.', link: 'https://www.linkedin.com/in/harsh-dubey-73794930a/' },
+    { name: 'Adarsh Kumar', role: 'Core Team Member', emoji: '👨‍💼', desc: 'Contributing to the growth and development of Vidhan.ai.', email: 'adarshkumarclassx@gmail.com' },
+    { name: 'Rekha Kumari', role: 'Core Team Member', emoji: '👩‍💼', desc: 'Contributing to the growth and development of Vidhan.ai.', link: 'https://www.linkedin.com/in/rekha-kumari-803605358/' },
+    { name: 'Muskan', role: 'Core Team Member', emoji: '👩‍💼', desc: 'Contributing to the growth and development of Vidhan.ai.', link: 'https://www.linkedin.com/in/muskan-951331355/' },
+    { name: 'Prabhat Kumar', role: 'Core Team Member', emoji: '👨‍💼', desc: 'Contributing to the growth and development of Vidhan.ai.', link: 'https://www.linkedin.com/in/prabhat-kumar-28b9382a7/' },
     { name: 'AI Legal Engine', role: 'Powered by Gemini 2.5 Flash', emoji: '🤖', desc: 'Our AI is trained on BNS 2023, Motor Vehicles Act, and other key Indian legal frameworks.' },
     { name: 'Sarvam AI', role: 'Voice & Language Partner', emoji: '🎙️', desc: 'Multilingual voice support in Hindi, Telugu, Odia, English and more Indian languages.' },
   ];
@@ -1057,11 +1062,24 @@ const AboutPage = ({ ecoMode }) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {team.map(m => (
-              <div key={m.name} className={`p-6 rounded-3xl border text-center transition-all hover:-translate-y-1 ${card}`}>
+              <div key={m.name} className={`p-6 rounded-3xl border text-center transition-all hover:-translate-y-1 relative ${card} ${m.founder ? (ecoMode ? 'border-emerald-500/50 shadow-lg shadow-emerald-500/10' : 'border-teal-400 shadow-lg shadow-teal-100') : ''}`}>
+                {m.founder && <span className={`absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full ${ecoMode ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-teal-50 text-teal-700 border border-teal-200'}`}>Founder</span>}
                 <div className="text-5xl mb-4">{m.emoji}</div>
                 <h3 className={`font-extrabold text-sm mb-1 ${ecoMode ? 'text-[#E8F5EE]' : 'text-slate-900'}`}>{m.name}</h3>
                 <p className={`text-xs font-bold mb-3 ${accent}`}>{m.role}</p>
-                <p className={`text-xs leading-relaxed ${sub}`}>{m.desc}</p>
+                <p className={`text-xs leading-relaxed mb-4 ${sub}`}>{m.desc}</p>
+                {m.link && (
+                  <a href={m.link} target="_blank" rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl transition-all ${ecoMode ? 'bg-[#132A20] text-emerald-400 hover:bg-emerald-600 hover:text-white' : 'bg-slate-100 text-slate-600 hover:bg-teal-600 hover:text-white'}`}>
+                    🔗 LinkedIn
+                  </a>
+                )}
+                {m.email && (
+                  <a href={`mailto:${m.email}`}
+                    className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl transition-all ${ecoMode ? 'bg-[#132A20] text-emerald-400 hover:bg-emerald-600 hover:text-white' : 'bg-slate-100 text-slate-600 hover:bg-teal-600 hover:text-white'}`}>
+                    ✉️ Email
+                  </a>
+                )}
               </div>
             ))}
           </div>
